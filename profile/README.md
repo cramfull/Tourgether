@@ -1,8 +1,8 @@
-# 흑백문고(heukbaekbook)
-> Since 2024.10.15
+# 투어게더(Tourgether)
+> Since 2025.04.01
 
 
-- 주제: 고객이 책을 검색하고 주문할 수 있는 인터넷 서점 개발
+- Tourgether: Your Personal Docent in Seoul
 
 ## 👨‍💻  구성원
 <table>
