@@ -3,16 +3,19 @@ package com.tourgether.tourgether.member.entity;
 import com.tourgether.tourgether.language.entity.Language;
 import com.tourgether.tourgether.member.enums.Provider;
 import com.tourgether.tourgether.member.enums.Status;
+import com.tourgether.tourgether.visit.entity.Visit;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.time.LocalDateTime;
 
-@Entity
+
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
 @Table(name = "social_members")
 public class Member {
 
@@ -47,4 +50,7 @@ public class Member {
     @ManyToOne
     @JoinColumn(name = "language_id", nullable = false)
     private Language languageId;
+
+    @OneToMany(mappedBy = "member")
+    private List<Visit> visitList = new ArrayList<>();
 }
