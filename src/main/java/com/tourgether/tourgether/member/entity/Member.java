@@ -53,4 +53,9 @@ public class Member {
 
     @OneToMany(mappedBy = "member")
     private List<Visit> visitList = new ArrayList<>();
+
+    public void withdraw() {
+        this.status = Status.WITHDRAW;
+        this.updatedAt = LocalDateTime.now();
+    }
 }

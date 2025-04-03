@@ -15,8 +15,8 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(
-        name = "attraction_translations",
-        uniqueConstraints = {@UniqueConstraint(columnNames = {"language_id", "attraction_id"})}
+    name = "attraction_translations",
+    uniqueConstraints = {@UniqueConstraint(columnNames = {"language_id", "attraction_id"})}
 )
 public class AttractionTranslation {
 

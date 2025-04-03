@@ -16,21 +16,23 @@ import java.util.stream.Collectors;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiResponse<?>> handleValidationException(MethodArgumentNotValidException ex) {
+    public ResponseEntity<ApiResponse<?>> handleValidationException(
+        MethodArgumentNotValidException ex) {
         String message = ex.getBindingResult().getFieldErrors().stream()
-                .map(DefaultMessageSourceResolvable::getDefaultMessage)
-                .collect(Collectors.joining(", "));
+            .map(DefaultMessageSourceResolvable::getDefaultMessage)
+            .collect(Collectors.joining(", "));
         log.warn("[ValidationException] {}", message, ex);
 
         return ResponseEntity.badRequest()
-                .body(ApiResponse.fail(HttpStatus.BAD_REQUEST.value(), message));
+            .body(ApiResponse.fail(HttpStatus.BAD_REQUEST.value(), message));
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<com.tourgether.tourgether.common.dto.ApiResponse<?>> handleGenericException(Exception ex) {
+    public ResponseEntity<com.tourgether.tourgether.common.dto.ApiResponse<?>> handleGenericException(
+        Exception ex) {
         log.error("[UnhandledException]", ex);
 
         return ResponseEntity.internalServerError()
-                .body(ApiResponse.fail(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage()));
+            .body(ApiResponse.fail(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage()));
     }
 }
