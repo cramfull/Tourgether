@@ -25,124 +25,124 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class MemberServiceImplTest {
+class MemberServiceImplTest {
 
-    @InjectMocks
-    private MemberServiceImpl memberService;
+  @InjectMocks
+  private MemberServiceImpl memberService;
 
-    @Mock
-    private MemberRepository memberRepository;
+  @Mock
+  private MemberRepository memberRepository;
 
-    @Mock
-    private OauthUnlinkService oauthUnlinkService;
+  @Mock
+  private OauthUnlinkService oauthUnlinkService;
 
-    @Test
-    @DisplayName("회원 탈퇴 성공 - 카카오")
-    void withdrawKakao() {
-        Long memberId = 1L;
-        Language language = new Language(1L, "EN");
-        Member member = new Member(1L, Provider.KAKAO, "kakao", "nickname", "profile",
-            LocalDateTime.now(), LocalDateTime.now(), Status.ACTIVE, language, null);
+  @Test
+  @DisplayName("회원 탈퇴 성공 - 카카오")
+  void withdrawKakao() {
+    Long memberId = 1L;
+    Language language = new Language(1L, "EN");
+    Member member = new Member(1L, Provider.KAKAO, "kakao", "nickname", "profile",
+        LocalDateTime.now(), LocalDateTime.now(), Status.ACTIVE, language, null);
 
-        CustomUserDetails userDetails = new CustomUserDetails(
-            memberId, "kakao", Provider.KAKAO, "nickname", Status.ACTIVE
-        );
+    CustomUserDetails userDetails = new CustomUserDetails(
+        memberId, "kakao", Provider.KAKAO, Status.ACTIVE
+    );
 
-        given(memberRepository.findByIdAndStatus(memberId, Status.ACTIVE))
-            .willReturn(Optional.of(member));
+    given(memberRepository.findByIdAndStatus(memberId, Status.ACTIVE))
+        .willReturn(Optional.of(member));
 
-        memberService.withdraw(userDetails);
+    memberService.withdraw(userDetails);
 
-        assertThat(member.getStatus()).isEqualTo(Status.WITHDRAW);
+    assertThat(member.getStatus()).isEqualTo(Status.WITHDRAW);
 
-        verify(oauthUnlinkService, times(1)).unlink(Provider.KAKAO, "kakao");
-    }
+    verify(oauthUnlinkService, times(1)).unlink(Provider.KAKAO, "kakao");
+  }
 
-    @Test
-    @DisplayName("네이버 회원 탈퇴 성공")
-    void withdrawNaver() {
-        Long memberId = 2L;
-        Language language = new Language(2L, "KO");
-        Member member = new Member(memberId, Provider.NAVER, null, "nickname", "profile",
-            LocalDateTime.now(), LocalDateTime.now(), Status.ACTIVE, language, null);
+  @Test
+  @DisplayName("네이버 회원 탈퇴 성공")
+  void withdrawNaver() {
+    Long memberId = 2L;
+    Language language = new Language(2L, "KO");
+    Member member = new Member(memberId, Provider.NAVER, null, "nickname", "profile",
+        LocalDateTime.now(), LocalDateTime.now(), Status.ACTIVE, language, null);
 
-        CustomUserDetails userDetails = new CustomUserDetails(
-            memberId, null, Provider.NAVER, "nick", Status.ACTIVE
-        );
+    CustomUserDetails userDetails = new CustomUserDetails(
+        memberId, null, Provider.NAVER, Status.ACTIVE
+    );
 
-        given(memberRepository.findByIdAndStatus(userDetails.memberId(), Status.ACTIVE))
-            .willReturn(Optional.of(member));
+    given(memberRepository.findByIdAndStatus(userDetails.memberId(), Status.ACTIVE))
+        .willReturn(Optional.of(member));
 
-        memberService.withdraw(userDetails);
+    memberService.withdraw(userDetails);
 
-        assertThat(member.getStatus()).isEqualTo(Status.WITHDRAW);
+    assertThat(member.getStatus()).isEqualTo(Status.WITHDRAW);
 
-        //임시
-        verify(oauthUnlinkService, times(1)).unlink(Provider.NAVER, null);
-    }
+    //임시
+    verify(oauthUnlinkService, times(1)).unlink(Provider.NAVER, null);
+  }
 
-    @Test
-    @DisplayName("구글 회원 탈퇴 성공")
-    void withdrawGoogle() {
-        Long memberId = 3L;
-        Language language = new Language(3L, "JP");
-        Member member = new Member(memberId, Provider.GOOGLE, null, "nickname", "profile",
-            LocalDateTime.now(), LocalDateTime.now(), Status.ACTIVE, language, null);
+  @Test
+  @DisplayName("구글 회원 탈퇴 성공")
+  void withdrawGoogle() {
+    Long memberId = 3L;
+    Language language = new Language(3L, "JP");
+    Member member = new Member(memberId, Provider.GOOGLE, null, "nickname", "profile",
+        LocalDateTime.now(), LocalDateTime.now(), Status.ACTIVE, language, null);
 
-        CustomUserDetails userDetails = new CustomUserDetails(
-            memberId, null, Provider.GOOGLE, "nick", Status.ACTIVE
-        );
+    CustomUserDetails userDetails = new CustomUserDetails(
+        memberId, null, Provider.GOOGLE, Status.ACTIVE
+    );
 
-        given(memberRepository.findByIdAndStatus(memberId, Status.ACTIVE))
-            .willReturn(Optional.of(member));
+    given(memberRepository.findByIdAndStatus(memberId, Status.ACTIVE))
+        .willReturn(Optional.of(member));
 
-        memberService.withdraw(userDetails);
+    memberService.withdraw(userDetails);
 
-        assertThat(member.getStatus()).isEqualTo(Status.WITHDRAW);
+    assertThat(member.getStatus()).isEqualTo(Status.WITHDRAW);
 
-        // 임시
-        verify(oauthUnlinkService, times(1)).unlink(Provider.GOOGLE, null);
-    }
+    // 임시
+    verify(oauthUnlinkService, times(1)).unlink(Provider.GOOGLE, null);
+  }
 
-    @Test
-    @DisplayName("회원 탈퇴 실패 - 존재하지 않는 사용자")
-    void withdrawFailNotFoundUser() {
-        Long memberId = 99L;
-        CustomUserDetails userDetails = new CustomUserDetails(
-            memberId, "no", Provider.KAKAO, "nickname", Status.ACTIVE
-        );
+  @Test
+  @DisplayName("회원 탈퇴 실패 - 존재하지 않는 사용자")
+  void withdrawFailNotFoundUser() {
+    Long memberId = 99L;
+    CustomUserDetails userDetails = new CustomUserDetails(
+        memberId, "no", Provider.KAKAO, Status.ACTIVE
+    );
 
-        given(memberRepository.findByIdAndStatus(memberId, Status.ACTIVE))
-            .willReturn(Optional.empty());
+    given(memberRepository.findByIdAndStatus(memberId, Status.ACTIVE))
+        .willReturn(Optional.empty());
 
-        org.junit.jupiter.api.Assertions.assertThrows(RuntimeException.class, () -> {
-            memberService.withdraw(userDetails);
-        });
-    }
+    org.junit.jupiter.api.Assertions.assertThrows(RuntimeException.class, () -> {
+      memberService.withdraw(userDetails);
+    });
+  }
 
-    @Test
-    @DisplayName("회원 탈퇴 실패 - 소셜 연동 해제 실패")
-    void withdrawFailUnlinkError() {
-        Long memberId = 4L;
-        Language language = new Language(4L, "JP");
-        Member member = new Member(memberId, Provider.KAKAO, "kakao", "nickname", "profile",
-            LocalDateTime.now(), LocalDateTime.now(), Status.ACTIVE, language, null);
+  @Test
+  @DisplayName("회원 탈퇴 실패 - 소셜 연동 해제 실패")
+  void withdrawFailUnlinkError() {
+    Long memberId = 4L;
+    Language language = new Language(4L, "JP");
+    Member member = new Member(memberId, Provider.KAKAO, "kakao", "nickname", "profile",
+        LocalDateTime.now(), LocalDateTime.now(), Status.ACTIVE, language, null);
 
-        CustomUserDetails userDetails = new CustomUserDetails(
-            memberId, "kakao", Provider.KAKAO, "nickname", Status.ACTIVE
-        );
+    CustomUserDetails userDetails = new CustomUserDetails(
+        memberId, "kakao", Provider.KAKAO, Status.ACTIVE
+    );
 
-        given(memberRepository.findByIdAndStatus(memberId, Status.ACTIVE))
-            .willReturn(Optional.of(member));
+    given(memberRepository.findByIdAndStatus(memberId, Status.ACTIVE))
+        .willReturn(Optional.of(member));
 
-        willThrow(new RuntimeException("연동 해제 실패"))
-            .given(oauthUnlinkService)
-            .unlink(Provider.KAKAO, "kakao");
+    willThrow(new RuntimeException("연동 해제 실패"))
+        .given(oauthUnlinkService)
+        .unlink(Provider.KAKAO, "kakao");
 
-        org.junit.jupiter.api.Assertions.assertThrows(RuntimeException.class, () -> {
-            memberService.withdraw(userDetails);
-        });
+    org.junit.jupiter.api.Assertions.assertThrows(RuntimeException.class, () -> {
+      memberService.withdraw(userDetails);
+    });
 
-        assertThat(member.getStatus()).isEqualTo(Status.ACTIVE);
-    }
+    assertThat(member.getStatus()).isEqualTo(Status.ACTIVE);
+  }
 }

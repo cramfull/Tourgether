@@ -12,17 +12,17 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "atractions")
+@Table(name = "attractions")
 public class Attraction {
 
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @Column(name = "id")
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @Column(name = "latitude", precision = 9, scale = 6, nullable = false)
-    private BigDecimal latitude;
+  @Column(name = "latitude", precision = 9, scale = 6, nullable = false)
+  private BigDecimal latitude;
 
-    @Column(name = "longitude", precision = 9, scale = 6, nullable = false)
-    private BigDecimal longitude;
+  @Column(name = "longitude", precision = 9, scale = 6, nullable = false)
+  private BigDecimal longitude;
 }

@@ -26,35 +26,34 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Import({MemberControllerTestConfig.class, SecurityConfigTest.class})
 public class MemberControllerTest {
 
-    @Autowired
-    private MockMvc mvc;
+  @Autowired
+  private MockMvc mvc;
 
-    @Autowired
-    private MemberService memberService;
+  @Autowired
+  private MemberService memberService;
 
-    @Test
-    @DisplayName("회원 탈퇴 성공")
-    @WithMockUser
-    void withdraw_success() throws Exception {
-        // given: CustomUserDetails 생성
-        CustomUserDetails userDetails = new CustomUserDetails(
-            1L,
-            "providerId",
-            Provider.KAKAO,
-            "nickname",
-            Status.ACTIVE
-        );
+  @Test
+  @DisplayName("회원 탈퇴 성공")
+  @WithMockUser
+  void withdraw_success() throws Exception {
+    // given: CustomUserDetails 생성
+    CustomUserDetails userDetails = new CustomUserDetails(
+        1L,
+        "providerId",
+        Provider.KAKAO,
+        Status.ACTIVE
+    );
 
-        Authentication auth = new TestingAuthenticationToken(userDetails, null);
-        SecurityContextHolder.getContext().setAuthentication(auth);
+    Authentication auth = new TestingAuthenticationToken(userDetails, null);
+    SecurityContextHolder.getContext().setAuthentication(auth);
 
-        // when & then
-        mvc.perform(delete("/api/v1/members")
-                .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk());
+    // when & then
+    mvc.perform(delete("/api/v1/members")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk());
 
-        // verify: 서비스 계층 호출 여부
-        Mockito.verify(memberService).withdraw(userDetails);
-    }
+    // verify: 서비스 계층 호출 여부
+    Mockito.verify(memberService).withdraw(userDetails);
+  }
 
 }

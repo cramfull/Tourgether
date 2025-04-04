@@ -9,10 +9,9 @@ spring:
     username: sa
     password:
 
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
+  sql:
+    init:
+      mode: never
 
   jpa:
     hibernate:
@@ -21,3 +20,8 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
