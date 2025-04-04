@@ -9,4 +9,9 @@ import java.util.Optional;
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
     Optional<Member> findByIdAndStatus(Long id, Status status);
+
+    default Member getActiveMemberOrThrow(Long id) {
+        return findByIdAndStatus(id, Status.ACTIVE)
+            .orElseThrow(() -> new RuntimeException("존재하지 않는 회원입니다."));
+    }
 }

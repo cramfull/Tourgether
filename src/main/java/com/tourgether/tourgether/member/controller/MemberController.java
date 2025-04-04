@@ -2,8 +2,9 @@ package com.tourgether.tourgether.member.controller;
 
 import com.tourgether.tourgether.auth.CustomUserDetails;
 import com.tourgether.tourgether.common.dto.ApiResponse;
-import com.tourgether.tourgether.language.entity.Language;
 import com.tourgether.tourgether.member.dto.request.LanguageUpdateRequest;
+import com.tourgether.tourgether.member.dto.request.NicknameUpdateRequest;
+import com.tourgether.tourgether.member.dto.response.NicknameUpdateResponse;
 import com.tourgether.tourgether.member.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +30,7 @@ public class MemberController {
         return ResponseEntity.ok(ApiResponse.success(null));
     }
 
-    @PatchMapping("/languages")
+    @PatchMapping("/me/languages")
     public ResponseEntity<ApiResponse<Void>> updateLanguage(
         @AuthenticationPrincipal CustomUserDetails userDetails,
         @RequestBody @Valid LanguageUpdateRequest languageUpdateRequest) {
@@ -38,4 +39,14 @@ public class MemberController {
         return ResponseEntity.ok(ApiResponse.success(null));
     }
 
+    @PatchMapping("/me/nickname")
+    public ResponseEntity<ApiResponse<NicknameUpdateResponse>> updateNickname(
+        @AuthenticationPrincipal CustomUserDetails userDetails,
+        @RequestBody @Valid NicknameUpdateRequest nicknameUpdateRequest) {
+
+        NicknameUpdateResponse response = memberService.updateNickname(userDetails.memberId(),
+            nicknameUpdateRequest.nickname());
+
+        return ResponseEntity.ok(ApiResponse.success(response));
+    }
 }
