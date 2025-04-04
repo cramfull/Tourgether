@@ -58,4 +58,9 @@ public class Member {
         this.status = Status.WITHDRAW;
         this.updatedAt = LocalDateTime.now();
     }
+
+    public void updateLanguage(Language language) {
+        this.languageId = language;
+        this.updatedAt = LocalDateTime.now();
+    }
 }

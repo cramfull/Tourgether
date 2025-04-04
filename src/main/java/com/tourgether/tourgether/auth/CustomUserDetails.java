@@ -12,7 +12,6 @@ public record CustomUserDetails(
     Long memberId,
     String providerId,
     Provider provider,
-    String nickname,
     Status status) implements UserDetails {
 
     @Override

@@ -2,6 +2,8 @@ package com.tourgether.tourgether.member.service.impl;
 
 import com.tourgether.tourgether.auth.CustomUserDetails;
 import com.tourgether.tourgether.auth.unlink.service.OauthUnlinkService;
+import com.tourgether.tourgether.language.entity.Language;
+import com.tourgether.tourgether.language.entity.repository.LanguageRepository;
 import com.tourgether.tourgether.member.entity.Member;
 import com.tourgether.tourgether.member.enums.Status;
 import com.tourgether.tourgether.member.repository.MemberRepository;
@@ -17,6 +19,7 @@ public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
     private final OauthUnlinkService oauthUnlinkService;
+    private final LanguageRepository languageRepository;
 
     @Transactional
     @Override
@@ -24,7 +27,7 @@ public class MemberServiceImpl implements MemberService {
 
         //TODO: GlobalExceptionHandler 확정 시 NotFoundException으로 변경
         Member member = memberRepository.findByIdAndStatus(userDetails.memberId(), Status.ACTIVE)
-            .orElseThrow(() -> new RuntimeException("존재하지 않는 사용자"));
+            .orElseThrow(() -> new RuntimeException("존재하지 않는 회원입니다."));
 
         String identifier = switch (userDetails.provider()) {
             case KAKAO -> userDetails.providerId();
@@ -37,5 +40,17 @@ public class MemberServiceImpl implements MemberService {
 
         oauthUnlinkService.unlink(userDetails.provider(), identifier);
         member.withdraw();
+    }
+
+    @Transactional
+    @Override
+    public void updateLanguage(Long memberId, String languageCode) {
+        Member member = memberRepository.findByIdAndStatus(memberId, Status.ACTIVE)
+            .orElseThrow(() -> new RuntimeException("존재하지 않는 회원입니다."));
+
+        Language language = languageRepository.findByLanguageCode(languageCode)
+            .orElseThrow(() -> new RuntimeException("지원하지 않는 언어입니다."));
+
+        member.updateLanguage(language);
     }
 }

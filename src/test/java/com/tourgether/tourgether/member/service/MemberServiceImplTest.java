@@ -70,7 +70,7 @@ public class MemberServiceImplTest {
             memberId, null, Provider.NAVER, "nick", Status.ACTIVE
         );
 
-        given(memberRepository.findByIdAndStatus(memberId, Status.ACTIVE))
+        given(memberRepository.findByIdAndStatus(userDetails.memberId(), Status.ACTIVE))
             .willReturn(Optional.of(member));
 
         memberService.withdraw(userDetails);
