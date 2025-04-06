@@ -48,7 +48,7 @@ public class MemberControllerTest {
     SecurityContextHolder.getContext().setAuthentication(auth);
 
     // when & then
-    mvc.perform(delete("/api/v1/members")
+    mvc.perform(delete("/api/v1/members/me")
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk());
 

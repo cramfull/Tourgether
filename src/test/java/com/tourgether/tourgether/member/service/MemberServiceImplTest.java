@@ -48,8 +48,7 @@ class MemberServiceImplTest {
         memberId, "kakao", Provider.KAKAO, Status.ACTIVE
     );
 
-    given(memberRepository.findByIdAndStatus(memberId, Status.ACTIVE))
-        .willReturn(Optional.of(member));
+    given(memberRepository.getActiveMemberOrThrow(userDetails.memberId())).willReturn(member);
 
     memberService.withdraw(userDetails);
 
@@ -70,8 +69,7 @@ class MemberServiceImplTest {
         memberId, null, Provider.NAVER, Status.ACTIVE
     );
 
-    given(memberRepository.findByIdAndStatus(userDetails.memberId(), Status.ACTIVE))
-        .willReturn(Optional.of(member));
+    given(memberRepository.getActiveMemberOrThrow(userDetails.memberId())).willReturn(member);
 
     memberService.withdraw(userDetails);
 
@@ -93,8 +91,7 @@ class MemberServiceImplTest {
         memberId, null, Provider.GOOGLE, Status.ACTIVE
     );
 
-    given(memberRepository.findByIdAndStatus(memberId, Status.ACTIVE))
-        .willReturn(Optional.of(member));
+    given(memberRepository.getActiveMemberOrThrow(userDetails.memberId())).willReturn(member);
 
     memberService.withdraw(userDetails);
 
@@ -112,8 +109,7 @@ class MemberServiceImplTest {
         memberId, "no", Provider.KAKAO, Status.ACTIVE
     );
 
-    given(memberRepository.findByIdAndStatus(memberId, Status.ACTIVE))
-        .willReturn(Optional.empty());
+    given(memberRepository.getActiveMemberOrThrow(userDetails.memberId())).willReturn(null);
 
     org.junit.jupiter.api.Assertions.assertThrows(RuntimeException.class, () -> {
       memberService.withdraw(userDetails);
@@ -132,8 +128,7 @@ class MemberServiceImplTest {
         memberId, "kakao", Provider.KAKAO, Status.ACTIVE
     );
 
-    given(memberRepository.findByIdAndStatus(memberId, Status.ACTIVE))
-        .willReturn(Optional.of(member));
+    given(memberRepository.getActiveMemberOrThrow(userDetails.memberId())).willReturn(member);
 
     willThrow(new RuntimeException("연동 해제 실패"))
         .given(oauthUnlinkService)
