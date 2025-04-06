@@ -24,4 +24,17 @@ public class AttractionController {
 
     return ResponseEntity.ok(ApiResponse.success(attractions));
   }
+
+  @GetMapping("/nearby")
+  public ResponseEntity<ApiResponse<List<AttractionResponse>>> getNearbyAttractions(
+      @RequestParam double latitude,
+      @RequestParam double longitude,
+      @RequestParam double radius,
+      @RequestParam Long languageId
+  ) {
+    List<AttractionResponse> nearbyAttractions = attractionService.searchNearbyAttractions(
+        latitude, longitude, radius, languageId);
+
+    return ResponseEntity.ok(ApiResponse.success(nearbyAttractions));
+  }
 }

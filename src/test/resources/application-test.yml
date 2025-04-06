@@ -4,14 +4,10 @@ spring:
       on-profile: test
 
   datasource:
-    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
-
-  sql:
-    init:
-      mode: never
+    url: jdbc:postgresql://localhost:5432/devdb
+    driver-class-name: org.postgresql.Driver
+    username: devuser
+    password: devpass123
 
   jpa:
     hibernate:
@@ -21,7 +17,6 @@ spring:
       hibernate:
         format_sql: true
 
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
+  sql:
+    init:
+      mode: never

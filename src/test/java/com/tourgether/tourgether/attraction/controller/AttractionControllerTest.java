@@ -50,8 +50,6 @@ class AttractionControllerTest {
         "경복궁",
         "서울 종로구",
         "조선 시대 궁궐",
-        null,
-        "경복궁 설명 텍스트",
         "월요일",
         "09:00",
         "화요일",
@@ -87,5 +85,38 @@ class AttractionControllerTest {
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.success").value(true))
         .andExpect(jsonPath("$.data").isArray());
+  }
+
+  @Test
+  @DisplayName("GET /api/v1/attractions/nearby - 정상 요청 시 200 OK와 ApiResponse 반환")
+  void getNearbyAttractions_success() throws Exception {
+    // given
+    AttractionResponse response = new AttractionResponse(
+        1L,
+        "경복궁",
+        "서울 종로구",
+        "조선 시대 궁궐",
+        "월요일",
+        "09:00",
+        "화요일",
+        new BigDecimal("37.5796"),
+        new BigDecimal("126.9770")
+    );
+
+    when(attractionService.searchNearbyAttractions(37.5796, 126.9770, 1000, 1L))
+        .thenReturn(List.of(response));
+
+    // when & then
+    mockMvc.perform(get("/api/v1/attractions/nearby")
+            .param("latitude", "37.5796")
+            .param("longitude", "126.9770")
+            .param("radius", "1000")
+            .param("languageId", "1")
+            .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.success").value(true))
+        .andExpect(jsonPath("$.code").value(200))
+        .andExpect(jsonPath("$.message").value("요청 성공"))
+        .andExpect(jsonPath("$.data[0].name").value("경복궁"));
   }
 }

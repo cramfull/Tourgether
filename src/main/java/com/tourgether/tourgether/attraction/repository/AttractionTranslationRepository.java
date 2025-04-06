@@ -21,4 +21,23 @@ public interface AttractionTranslationRepository extends
       @Param("language") Language language,
       @Param("keyword") String keyword
   );
+
+  @Query(value = """
+      SELECT at.*
+      FROM attraction_translations at
+      JOIN attractions a ON at.attraction_id = a.id
+      WHERE at.language_id = :languageId
+        AND ST_DWithin(
+          a.location,
+          ST_SetSRID(ST_MakePoint(:lon, :lat), 4326)::geography,
+          :radius
+        )
+      """, nativeQuery = true)
+  List<AttractionTranslation> findNearbyAttractionsByLanguageId(
+      @Param("lat") double latitude,
+      @Param("lon") double longitude,
+      @Param("radius") double radiusInMeters,
+      @Param("languageId") Long languageId
+  );
+
 }
