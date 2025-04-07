@@ -3,6 +3,7 @@ package com.tourgether.tourgether.attraction.repository;
 import com.tourgether.tourgether.attraction.entity.AttractionTranslation;
 import com.tourgether.tourgether.language.entity.Language;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -40,4 +41,6 @@ public interface AttractionTranslationRepository extends
       @Param("languageId") Long languageId
   );
 
+  Optional<AttractionTranslation> findByAttractionIdAndLanguageId(Long attractionId,
+      Long languageId);
 }

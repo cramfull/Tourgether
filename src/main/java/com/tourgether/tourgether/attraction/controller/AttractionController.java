@@ -1,6 +1,8 @@
 package com.tourgether.tourgether.attraction.controller;
 
+import com.tourgether.tourgether.attraction.dto.AttractionDetailResponse;
 import com.tourgether.tourgether.attraction.dto.AttractionResponse;
+import com.tourgether.tourgether.attraction.dto.LevelDescriptionResponse;
 import com.tourgether.tourgether.attraction.service.AttractionService;
 import com.tourgether.tourgether.common.dto.ApiResponse;
 import java.util.List;
@@ -37,4 +39,27 @@ public class AttractionController {
 
     return ResponseEntity.ok(ApiResponse.success(nearbyAttractions));
   }
+
+  @GetMapping("/{attractionId}")
+  public ResponseEntity<ApiResponse<AttractionDetailResponse>> getAttractionDetail(
+      @PathVariable Long attractionId,
+      @RequestParam("lang") Long languageId
+  ) {
+    AttractionDetailResponse detail = attractionService.getAttractionDetail(
+        attractionId, languageId);
+
+    return ResponseEntity.ok(ApiResponse.success(detail));
+  }
+
+  @GetMapping("/{attractionId}/levels")
+  public ResponseEntity<ApiResponse<List<LevelDescriptionResponse>>> getLevelDescriptions(
+      @PathVariable Long attractionId,
+      @RequestParam("lang") Long languageId
+  ) {
+    List<LevelDescriptionResponse> descriptions = attractionService.getAttractionLevelDescriptions(
+        attractionId, languageId);
+
+    return ResponseEntity.ok(ApiResponse.success(descriptions));
+  }
+
 }
