@@ -22,4 +22,7 @@ public class Attraction {
 
   @Column(columnDefinition = "geometry(Point, 4326)", nullable = false)
   private Point location;
+
+  @Column(name = "thumbnail_img_url", nullable = false, columnDefinition = "TEXT")
+  private String thumbnailImgUrl;
 }
