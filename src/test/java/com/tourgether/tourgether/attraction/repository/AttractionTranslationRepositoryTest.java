@@ -49,8 +49,8 @@ class AttractionTranslationRepositoryTest {
     Point location1 = createPoint(37.0, 127.0);
     Point location2 = createPoint(37.0, 127.0);
 
-    Attraction attraction = new Attraction(null, location1);
-    Attraction attraction2 = new Attraction(null, location2);
+    Attraction attraction = new Attraction(null, location1, "url");
+    Attraction attraction2 = new Attraction(null, location2, "url");
     Attraction savedAttraction = attractionRepository.save(attraction);
     Attraction savedAttraction2 = attractionRepository.save(attraction2);
 
@@ -63,8 +63,7 @@ class AttractionTranslationRepositoryTest {
         "아름다운 건축 양식으로 유명합니다",
         null,
         "조선 시대의 상징적인 문입니다",
-        null, null, null,
-        List.of()
+        null, null, null
     );
 
     AttractionTranslation translation2 = new AttractionTranslation(
@@ -76,8 +75,7 @@ class AttractionTranslationRepositoryTest {
         "아름다운 건축 양식으로 유명합니다",
         null,
         "조선 시대의 상징적인 문입니다",
-        null, null, null,
-        List.of()
+        null, null, null
     );
 
     translationRepository.save(translation1);
@@ -104,23 +102,23 @@ class AttractionTranslationRepositoryTest {
     Point location2 = createPoint(37.5700, 126.9830); // 창덕궁
     Point farLocation = createPoint(37.0, 127.0);     // 멀리 떨어진 곳
 
-    Attraction attraction1 = attractionRepository.save(new Attraction(null, location1));
-    Attraction attraction2 = attractionRepository.save(new Attraction(null, location2));
-    Attraction attractionFar = attractionRepository.save(new Attraction(null, farLocation));
+    Attraction attraction1 = attractionRepository.save(new Attraction(null, location1, "url"));
+    Attraction attraction2 = attractionRepository.save(new Attraction(null, location2, "url"));
+    Attraction attractionFar = attractionRepository.save(new Attraction(null, farLocation, "url"));
 
     translationRepository.save(new AttractionTranslation(
         null, savedLanguage, attraction1, "경복궁", "서울 종로구 세종로", "조선 시대의 대표 궁궐",
-        null, "경복궁은 조선의 법궁으로...", "화요일~일요일", "09:00~18:00", "월요일", List.of()
+        null, "경복궁은 조선의 법궁으로...", "화요일~일요일", "09:00~18:00", "월요일"
     ));
 
     translationRepository.save(new AttractionTranslation(
         null, savedLanguage, attraction2, "창덕궁", "서울 종로구 율곡로", "유네스코 세계유산",
-        null, "창덕궁은 자연과 조화를 이룬 궁궐로…", "화요일~일요일", "09:00~17:30", "월요일", List.of()
+        null, "창덕궁은 자연과 조화를 이룬 궁궐로…", "화요일~일요일", "09:00~17:30", "월요일"
     ));
 
     translationRepository.save(new AttractionTranslation(
         null, savedLanguage, attractionFar, "멀리있는궁궐", "서울", "먼 곳",
-        null, "멀리 떨어진 궁궐입니다", "수요일", "10:00", "화요일", List.of()
+        null, "멀리 떨어진 궁궐입니다", "수요일", "10:00", "화요일"
     ));
 
     double centerLat = 37.5750;

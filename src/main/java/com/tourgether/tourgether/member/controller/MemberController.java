@@ -1,7 +1,7 @@
 package com.tourgether.tourgether.member.controller;
 
 import com.tourgether.tourgether.auth.CustomUserDetails;
-import com.tourgether.tourgether.common.dto.ApiResponse;
+import com.tourgether.tourgether.common.dto.ApiResult;
 import com.tourgether.tourgether.member.dto.request.LanguageUpdateRequest;
 import com.tourgether.tourgether.member.dto.request.NicknameUpdateRequest;
 import com.tourgether.tourgether.member.dto.response.MemberInfoResponse;
@@ -26,36 +26,36 @@ public class MemberController {
   private final MemberService memberService;
 
   @DeleteMapping
-  public ResponseEntity<ApiResponse<Void>> withdraw(
+  public ResponseEntity<ApiResult<Void>> withdraw(
       @AuthenticationPrincipal CustomUserDetails userDetails) {
     memberService.withdraw(userDetails);
-    return ResponseEntity.ok(ApiResponse.success(null));
+    return ResponseEntity.ok(ApiResult.success(null));
   }
 
   @PatchMapping("/languages")
-  public ResponseEntity<ApiResponse<Void>> updateLanguage(
+  public ResponseEntity<ApiResult<Void>> updateLanguage(
       @AuthenticationPrincipal CustomUserDetails userDetails,
       @RequestBody @Valid LanguageUpdateRequest languageUpdateRequest) {
 
     memberService.updateLanguage(userDetails.memberId(), languageUpdateRequest.languageCode());
-    return ResponseEntity.ok(ApiResponse.success(null));
+    return ResponseEntity.ok(ApiResult.success(null));
   }
 
   @PatchMapping("/nickname")
-  public ResponseEntity<ApiResponse<NicknameUpdateResponse>> updateNickname(
+  public ResponseEntity<ApiResult<NicknameUpdateResponse>> updateNickname(
       @AuthenticationPrincipal CustomUserDetails userDetails,
       @RequestBody @Valid NicknameUpdateRequest nicknameUpdateRequest) {
 
     NicknameUpdateResponse response = memberService.updateNickname(userDetails.memberId(),
         nicknameUpdateRequest.nickname());
 
-    return ResponseEntity.ok(ApiResponse.success(response));
+    return ResponseEntity.ok(ApiResult.success(response));
   }
 
   @GetMapping
-  public ResponseEntity<ApiResponse<MemberInfoResponse>> getMemberInfo(
+  public ResponseEntity<ApiResult<MemberInfoResponse>> getMemberInfo(
       @AuthenticationPrincipal CustomUserDetails userDetails) {
     MemberInfoResponse response = memberService.getMemberInfo(userDetails.memberId());
-    return ResponseEntity.ok(ApiResponse.success(response));
+    return ResponseEntity.ok(ApiResult.success(response));
   }
 }

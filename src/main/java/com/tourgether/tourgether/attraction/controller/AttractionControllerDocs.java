@@ -1,0 +1,103 @@
+package com.tourgether.tourgether.attraction.controller;
+
+import com.tourgether.tourgether.attraction.dto.AttractionDetailResponse;
+import com.tourgether.tourgether.attraction.dto.AttractionSummaryResponse;
+import com.tourgether.tourgether.attraction.dto.LevelDescriptionResponse;
+import com.tourgether.tourgether.common.dto.ApiResult;
+import com.tourgether.tourgether.common.dto.ExceptionResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.Min;
+import org.springframework.http.ResponseEntity;
+
+import java.util.List;
+
+@Tag(name = "Attraction", description = "여행지 관련 API")
+public interface AttractionControllerDocs {
+
+  @Operation(summary = "여행지 전체 조회", description = "언어 ID와 키워드로 여행지 리스트를 조회합니다.")
+  @ApiResponse(responseCode = "200", description = "정상적으로 조회됨")
+  @ApiResponse(
+      responseCode = "400",
+      description = "잘못된 요청 파라미터",
+      content = @Content(schema = @Schema(implementation = ExceptionResponse.class))
+  )
+  @ApiResponse(
+      responseCode = "404",
+      description = "해당 언어 ID가 존재하지 않음",
+      content = @Content(schema = @Schema(implementation = ExceptionResponse.class))
+  )
+  @ApiResponse(
+      responseCode = "500",
+      description = "서버 내부 오류",
+      content = @Content(schema = @Schema(implementation = ExceptionResponse.class))
+  )
+  ResponseEntity<ApiResult<List<AttractionSummaryResponse>>> getAttractions(
+      @Parameter(description = "언어 ID", example = "1") Long languageId,
+      @Parameter(description = "검색 키워드", example = "경복궁") String keyword
+  );
+
+
+  @Operation(summary = "근처 여행지 조회", description = "위도, 경도, 반경과 언어 ID로 주변 여행지를 조회합니다.")
+  @ApiResponse(responseCode = "200", description = "정상적으로 조회됨")
+  @ApiResponse(
+      responseCode = "400",
+      description = "잘못된 요청 (예: 반경이 1m 미만일 경우)",
+      content = @Content(schema = @Schema(implementation = ExceptionResponse.class))
+  )
+  @ApiResponse(
+      responseCode = "404",
+      description = "해당 언어 ID가 존재하지 않음",
+      content = @Content(schema = @Schema(implementation = ExceptionResponse.class))
+  )
+  @ApiResponse(
+      responseCode = "500",
+      description = "서버 내부 오류",
+      content = @Content(schema = @Schema(implementation = ExceptionResponse.class))
+  )
+  ResponseEntity<ApiResult<List<AttractionSummaryResponse>>> getNearbyAttractions(
+      @Parameter(description = "위도", example = "37.5700") double latitude,
+      @Parameter(description = "경도", example = "126.9830") double longitude,
+      @Parameter(description = "반경(m)", example = "1000") @Min(value = 1, message = "반경은 1m 이상이어야 합니다.") double radius,
+      @Parameter(description = "언어 ID", example = "1") Long languageId
+  );
+
+
+  @Operation(summary = "여행지 상세 조회", description = "여행지 ID와 언어 ID로 상세 정보를 조회합니다.")
+  @ApiResponse(responseCode = "200", description = "정상적으로 조회됨")
+  @ApiResponse(
+      responseCode = "404",
+      description = "해당 언어나 여행지 ID에 대한 번역 정보가 없음",
+      content = @Content(schema = @Schema(implementation = ExceptionResponse.class))
+  )
+  @ApiResponse(
+      responseCode = "500",
+      description = "서버 내부 오류",
+      content = @Content(schema = @Schema(implementation = ExceptionResponse.class))
+  )
+  ResponseEntity<ApiResult<AttractionDetailResponse>> getAttractionDetail(
+      @Parameter(description = "여행지 ID", example = "1") Long attractionId,
+      @Parameter(description = "언어 ID", example = "1") Long languageId
+  );
+
+
+  @Operation(summary = "단계별 설명 조회", description = "여행지 번역 ID를 기반으로 구간별 여행지 설명을 조회합니다.")
+  @ApiResponse(responseCode = "200", description = "정상적으로 조회됨")
+  @ApiResponse(
+      responseCode = "404",
+      description = "해당 번역 ID가 존재하지 않음",
+      content = @Content(schema = @Schema(implementation = ExceptionResponse.class))
+  )
+  @ApiResponse(
+      responseCode = "500",
+      description = "서버 내부 오류",
+      content = @Content(schema = @Schema(implementation = ExceptionResponse.class))
+  )
+  ResponseEntity<ApiResult<List<LevelDescriptionResponse>>> getLevelDescriptions(
+      @Parameter(description = "번역 ID", example = "1") Long translationId
+  );
+}

@@ -6,8 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface LevelDescriptionRepository extends JpaRepository<LevelDescription, Long> {
 
-  List<LevelDescription> findByTranslationAttractionIdAndTranslationLanguageId(
-      Long attractionId,
-      Long languageId
-  );
+  List<LevelDescription> findByTranslationTranslationId(Long translationId);
+
 }
