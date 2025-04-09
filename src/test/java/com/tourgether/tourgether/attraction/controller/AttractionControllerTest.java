@@ -115,7 +115,7 @@ class AttractionControllerTest {
   }
 
   @Test
-  @DisplayName("GET /api/v1/attractions/{id} - 상세 조회 시 200 OK와 ApiResponse 반환")
+  @DisplayName("GET /api/v1/attractions/{translationId} - 상세 조회 시 200 OK와 ApiResponse 반환")
   void getAttractionDetailSuccess() throws Exception {
     // given
     AttractionDetailResponse detailResponse = new AttractionDetailResponse(
@@ -132,11 +132,10 @@ class AttractionControllerTest {
         new BigDecimal("126.9770")
     );
 
-    when(attractionService.getAttractionDetail(1L, 1L)).thenReturn(detailResponse);
+    when(attractionService.getAttractionDetail(1L)).thenReturn(detailResponse);
 
     // when & then
     mockMvc.perform(get("/api/v1/attractions/1")
-            .param("lang", "1")
             .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.success").value(true))
@@ -149,6 +148,7 @@ class AttractionControllerTest {
         .andExpect(jsonPath("$.data.openingTime").value("09:00"))
         .andExpect(jsonPath("$.data.closedDay").value("월요일"));
   }
+
 
   @Test
   @DisplayName("GET /api/v1/attractions/{translationId}/levels - 단계별 설명 정상 조회")
@@ -170,4 +170,41 @@ class AttractionControllerTest {
         .andExpect(jsonPath("$.data[0].description").value("입구에서 정전까지"))
         .andExpect(jsonPath("$.data[1].description").value("정전 내부 설명"));
   }
+
+  @Test
+  @DisplayName("GET /api/v1/attractions/attractions/popular - 인기 관광지 조회 성공")
+  void getPopularAttractionsSuccess() throws Exception {
+    // given
+    AttractionSummaryResponse response1 = new AttractionSummaryResponse(
+        1L,
+        "경복궁",
+        "서울 종로구",
+        "조선 시대 궁궐",
+        "url"
+    );
+
+    AttractionSummaryResponse response2 = new AttractionSummaryResponse(
+        2L,
+        "창덕궁",
+        "서울 종로구",
+        "자연과 조화를 이룬 궁궐",
+        "url2"
+    );
+
+    when(attractionService.getPopularAttractions(1L, 2))
+        .thenReturn(List.of(response1, response2));
+
+    // when & then
+    mockMvc.perform(get("/api/v1/attractions/attractions/popular")
+            .param("languageId", "1")
+            .param("limit", "2")
+            .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.success").value(true))
+        .andExpect(jsonPath("$.code").value(200))
+        .andExpect(jsonPath("$.message").value("요청 성공"))
+        .andExpect(jsonPath("$.data[0].name").value("경복궁"))
+        .andExpect(jsonPath("$.data[1].name").value("창덕궁"));
+  }
+
 }

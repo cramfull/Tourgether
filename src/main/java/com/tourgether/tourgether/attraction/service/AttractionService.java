@@ -17,7 +17,9 @@ public interface AttractionService {
       Long languageId
   );
 
-  AttractionDetailResponse getAttractionDetail(Long attractionId, Long languageId);
+  AttractionDetailResponse getAttractionDetail(Long translationId);
 
   List<LevelDescriptionResponse> getAttractionLevelDescriptions(Long translationId);
+
+  List<AttractionSummaryResponse> getPopularAttractions(Long languageId, int limit);
 }

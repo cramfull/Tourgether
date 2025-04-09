@@ -134,11 +134,12 @@ class AttractionServiceTest {
   }
 
   @Test
-  @DisplayName("여행지 상세 정보를 언어 ID와 관광지 ID로 조회할 수 있다")
+  @DisplayName("여행지 상세 정보를 번역 ID로 조회할 수 있다")
   void getAttractionDetailSuccess() {
     // given
+    Long translationId = 1L;
     AttractionTranslation translation = new AttractionTranslation(
-        1L,
+        translationId,
         language,
         attraction,
         "경복궁",
@@ -151,31 +152,36 @@ class AttractionServiceTest {
         "월요일"
     );
 
-    when(translationRepository.findByAttractionIdAndLanguageId(1L, 1L))
+    when(translationRepository.findById(translationId))
         .thenReturn(Optional.of(translation));
 
     // when
-    AttractionDetailResponse attractionDetail = attractionService.getAttractionDetail(1L, 1L);
+    AttractionDetailResponse detail = attractionService.getAttractionDetail(translationId);
 
     // then
-    assertThat(attractionDetail.name()).isEqualTo("경복궁");
-    assertThat(attractionDetail.address()).isEqualTo("서울 종로구");
-    assertThat(attractionDetail.audioText()).contains("조선의 궁궐");
-    verify(translationRepository).findByAttractionIdAndLanguageId(1L, 1L);
+    assertThat(detail.name()).isEqualTo("경복궁");
+    assertThat(detail.address()).isEqualTo("서울 종로구");
+    assertThat(detail.audioText()).contains("조선의 궁궐");
+
+    verify(translationRepository).findById(translationId);
   }
 
   @Test
-  @DisplayName("존재하지 않는 언어 ID 또는 관광지 ID일 경우 예외가 발생한다")
+  @DisplayName("존재하지 않는 번역 ID일 경우 예외가 발생한다")
   void getAttractionDetailFail() {
     // given
-    when(translationRepository.findByAttractionIdAndLanguageId(999L, 1L))
+    Long invalidId = 999L;
+    when(translationRepository.findById(invalidId))
         .thenReturn(Optional.empty());
 
     // when & then
-    assertThatThrownBy(() -> attractionService.getAttractionDetail(999L, 1L))
+    assertThatThrownBy(() -> attractionService.getAttractionDetail(invalidId))
         .isInstanceOf(AttractionTranslationNotFoundException.class)
-        .hasMessage("해당 언어의 여행지 정보를 찾을 수 없습니다.");
+        .hasMessage("해당 번역 ID의 여행지 정보를 찾을 수 없습니다.");
+
+    verify(translationRepository).findById(invalidId);
   }
+
 
   @Test
   @DisplayName("여행지 단계별 설명을 번역 ID로 조회할 수 있다")
@@ -230,6 +236,48 @@ class AttractionServiceTest {
 
     verify(translationRepository).existsById(invalidTranslationId);
     verifyNoInteractions(levelDescriptionRepository);
+  }
+
+  @Test
+  @DisplayName("추천 관광지 조회 - 방문 수 기준으로 인기 관광지를 조회할 수 있다")
+  void getPopularAttractionsSuccess() {
+    // given
+    int limit = 2;
+    when(languageRepository.existsById(1L)).thenReturn(true);
+
+    AttractionTranslation popular1 = new AttractionTranslation(
+        1L, language, attraction, "경복궁", "서울", "궁궐", null, "경복궁 설명", null, null, null);
+    AttractionTranslation popular2 = new AttractionTranslation(
+        2L, language, attraction, "창덕궁", "서울", "궁궐", null, "창덕궁 설명", null, null, null);
+
+    when(translationRepository.findTopVisitedAttractions(1L, limit))
+        .thenReturn(List.of(popular1, popular2));
+
+    // when
+    List<AttractionSummaryResponse> results = attractionService.getPopularAttractions(1L, limit);
+
+    // then
+    assertThat(results).hasSize(2);
+    assertThat(results.get(0).name()).isEqualTo("경복궁");
+    assertThat(results.get(1).name()).isEqualTo("창덕궁");
+
+    verify(languageRepository).existsById(1L);
+    verify(translationRepository).findTopVisitedAttractions(1L, limit);
+  }
+
+  @Test
+  @DisplayName("추천 관광지 조회 실패 - 존재하지 않는 언어 ID")
+  void getPopularAttractionsFail() {
+    // given
+    when(languageRepository.existsById(999L)).thenReturn(false);
+
+    // when & then
+    assertThatThrownBy(() -> attractionService.getPopularAttractions(999L, 5))
+        .isInstanceOf(AttractionTranslationNotFoundException.class)
+        .hasMessage("존재하지 않는 언어입니다.");
+
+    verify(languageRepository).existsById(999L);
+    verifyNoInteractions(translationRepository);
   }
 
 }

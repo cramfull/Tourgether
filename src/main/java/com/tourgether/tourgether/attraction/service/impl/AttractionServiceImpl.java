@@ -50,13 +50,11 @@ public class AttractionServiceImpl implements AttractionService {
   }
 
   @Override
-  public AttractionDetailResponse getAttractionDetail(Long attractionId, Long languageId) {
-
-    AttractionTranslation attractionTranslation = translationRepository.findByAttractionIdAndLanguageId(
-            attractionId, languageId)
-        .orElseThrow(() -> new AttractionTranslationNotFoundException("해당 언어의 여행지 정보를 찾을 수 없습니다."));
-
-    return AttractionDetailResponse.from(attractionTranslation);
+  public AttractionDetailResponse getAttractionDetail(Long translationId) {
+    AttractionTranslation translation = translationRepository.findById(translationId)
+        .orElseThrow(
+            () -> new AttractionTranslationNotFoundException("해당 번역 ID의 여행지 정보를 찾을 수 없습니다."));
+    return AttractionDetailResponse.from(translation);
   }
 
   @Override
@@ -73,4 +71,18 @@ public class AttractionServiceImpl implements AttractionService {
         .map(LevelDescriptionResponse::from)
         .toList();
   }
+
+  @Override
+  public List<AttractionSummaryResponse> getPopularAttractions(Long languageId, int limit) {
+    boolean exists = languageRepository.existsById(languageId);
+    if (!exists) {
+      throw new AttractionTranslationNotFoundException("존재하지 않는 언어입니다.");
+    }
+
+    return translationRepository.findTopVisitedAttractions(languageId, limit)
+        .stream()
+        .map(AttractionSummaryResponse::from)
+        .toList();
+  }
+
 }
