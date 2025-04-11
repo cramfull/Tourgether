@@ -1,5 +1,6 @@
 package com.tourgether.tourgether.auth;
 
+import com.tourgether.tourgether.member.entity.Member;
 import com.tourgether.tourgether.member.enums.Provider;
 import com.tourgether.tourgether.member.enums.Status;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,6 +14,10 @@ public record CustomUserDetails(
     String providerId,
     Provider provider,
     Status status) implements UserDetails {
+
+    public CustomUserDetails(Member member) {
+        this(member.getId(), member.getProviderId(), member.getProvider(), member.getStatus());
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -31,6 +31,15 @@ public class GlobalExceptionHandler {
         .body(ApiResult.fail(HttpStatus.NOT_FOUND.value(), ex.getMessage()));
   }
 
+  @ExceptionHandler(UnauthorizedException.class)
+  public ResponseEntity<ApiResult<?>> handleUnauthorized(UnauthorizedException ex) {
+    log.warn("[UnauthorizedException] {}", ex.getMessage());
+
+    return ResponseEntity.badRequest()
+        .body(ApiResult.fail(HttpStatus.UNAUTHORIZED.value(), ex.getMessage()));
+  }
+
+
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<ApiResult<?>> handleValidationException(
       MethodArgumentNotValidException ex) {
@@ -52,4 +61,6 @@ public class GlobalExceptionHandler {
     return ResponseEntity.internalServerError()
         .body(ApiResult.fail(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage()));
   }
+
+
 }
