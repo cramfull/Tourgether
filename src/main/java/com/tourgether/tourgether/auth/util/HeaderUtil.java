@@ -1,10 +1,13 @@
 package com.tourgether.tourgether.auth.util;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.Getter;
 import org.springframework.stereotype.Component;
 
+@Getter
 @Component
 public class HeaderUtil {
+
   private final String PREFIX_AUTHORIZATION = "Authorization";
   private final String PREFIX_TOKEN_BEARER = "Bearer ";
 
@@ -15,4 +18,5 @@ public class HeaderUtil {
     }
     return null;
   }
+
 }

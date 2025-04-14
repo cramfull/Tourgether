@@ -4,12 +4,9 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.SignatureException;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
@@ -29,8 +26,8 @@ public class JwtUtil {
    * @param accessSecretKey  32Byte random code
    * @param refreshSecretKey 32Byte random code
    */
-  public JwtUtil(@Value("${spring.jwt.access.secret-key}") String accessSecretKey,
-      @Value("${spring.jwt.refresh.secret-key}") String refreshSecretKey) {
+  public JwtUtil(final @Value("${spring.jwt.access.secret-key}") String accessSecretKey,
+      final @Value("${spring.jwt.refresh.secret-key}") String refreshSecretKey) {
     this.accessSecretKey = new SecretKeySpec(
         accessSecretKey.getBytes(StandardCharsets.UTF_8),
         Jwts.SIG.HS256.key().build().getAlgorithm());
