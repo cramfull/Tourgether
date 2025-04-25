@@ -60,4 +60,6 @@ public interface AttractionTranslationRepository extends
       @Param("limit") int limit
   );
 
+  Optional<AttractionTranslation> findByAttractionIdAndLanguageId(Long attractionId,
+      Long languageId);
 }
