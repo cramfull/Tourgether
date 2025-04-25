@@ -25,7 +25,7 @@ public class VisitServiceImpl implements VisitService {
   @Transactional
   @Override
   public VisitResponse createVisit(Long memberId, VisitCreateRequest request) {
-    Member member = memberRepository.getActiveMemberOrThrow(memberId);
+    Member member = memberRepository.getMemberOrThrow(memberId);
 
     Attraction attraction = attractionRepository.findById(request.attractionId())
         .orElseThrow(

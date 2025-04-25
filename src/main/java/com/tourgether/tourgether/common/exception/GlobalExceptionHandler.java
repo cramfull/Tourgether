@@ -35,8 +35,16 @@ public class GlobalExceptionHandler {
   public ResponseEntity<ApiResult<?>> handleUnauthorized(UnauthorizedException ex) {
     log.warn("[UnauthorizedException] {}", ex.getMessage());
 
-    return ResponseEntity.badRequest()
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
         .body(ApiResult.fail(HttpStatus.UNAUTHORIZED.value(), ex.getMessage()));
+  }
+
+  @ExceptionHandler(BadGatewayException.class)
+  public ResponseEntity<ApiResult<?>> handleBadGateway(BadGatewayException ex) {
+    log.warn("[BadGatewayException] {}", ex.getMessage());
+
+    return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
+            .body(ApiResult.fail(HttpStatus.BAD_GATEWAY.value(), ex.getMessage()));
   }
 
 

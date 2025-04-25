@@ -13,19 +13,19 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class OAuth2StrategyContext {
 
-    private final List<OAuth2LoginStrategy> oAuth2LoginStrategyList;
-    private final Map<Provider, OAuth2LoginStrategy> oAuth2LoginStrategyMap = new HashMap<>();
+    private final List<OAuth2Strategy> oAuth2StrategyList;
+    private final Map<Provider, OAuth2Strategy> oAuth2StrategyMap = new HashMap<>();
 
     @PostConstruct
     public void init() {
-        for (OAuth2LoginStrategy strategy : oAuth2LoginStrategyList) {
-            oAuth2LoginStrategyMap.put(strategy.getProvider(), strategy);
+        for (OAuth2Strategy strategy : oAuth2StrategyList) {
+            oAuth2StrategyMap.put(strategy.getProvider(), strategy);
         }
     }
 
-    public OAuth2LoginStrategy getStrategy(String providerType) {
+    public OAuth2Strategy getStrategy(String providerType) {
         Provider provider = Provider.from(providerType);
-        OAuth2LoginStrategy strategy = oAuth2LoginStrategyMap.get(provider);
+        OAuth2Strategy strategy = oAuth2StrategyMap.get(provider);
         if (strategy == null) {
             throw new IllegalArgumentException(String.format("%s는 지원하지 않는 소셜입니다.", provider));
         }

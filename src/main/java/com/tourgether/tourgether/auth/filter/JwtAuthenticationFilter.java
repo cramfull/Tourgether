@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -59,6 +60,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
           null, userDetails.getAuthorities());
 
       SecurityContextHolder.getContext().setAuthentication(authentication);
+      filterChain.doFilter(request, response);
 
     } catch (MemberNotFoundException e) {
       // Member 조회 실패 : 존재 하지 않거나 탈퇴한 회원임

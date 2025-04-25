@@ -25,4 +25,9 @@ public class RefreshTokenService {
         String storedRefreshToken = redisRepository.findByKey(key).get();
         return storedRefreshToken.equals(refreshToken);
     }
+
+    public void deleteRefreshToken(Long memberId) {
+        String key = REFRESH_TOKEN_PREFIX + memberId;
+        redisRepository.deleteByKey(key);
+    }
 }

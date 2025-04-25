@@ -7,7 +7,7 @@ import com.tourgether.tourgether.member.entity.Member;
 
 public interface MemberService {
 
-  void withdraw(CustomUserDetails userDetails);
+  void withdraw(Long memberId, String socialAccessToken);
 
   void updateLanguage(Long memberId, String languageCode);
 
