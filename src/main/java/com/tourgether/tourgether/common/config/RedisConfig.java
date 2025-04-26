@@ -17,20 +17,11 @@ public class RedisConfig {
     @Value("${spring.data.redis.port}")
     private int port;
 
-    // TODO docker로 redis server 띄우기
-//    @Value("${spring.data.redis.password}")
-//    private String password;
-
-//    @Value("${spring.data.redis.database}")
-//    private int redisDatabase;
-
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
         RedisStandaloneConfiguration redisConfig = new RedisStandaloneConfiguration();
         redisConfig.setHostName(host);
         redisConfig.setPort(port);
-//        redisConfig.setPassword(password);
-//        redisConfig.setDatabase(redisDatabase);
         return new LettuceConnectionFactory(redisConfig);
     }
 
@@ -40,7 +31,6 @@ public class RedisConfig {
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new StringRedisSerializer());
         redisTemplate.setConnectionFactory(redisConnectionFactory());
-
         return redisTemplate;
     }
 }

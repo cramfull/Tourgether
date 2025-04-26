@@ -35,10 +35,8 @@ spring:
 
   data:
     redis:
-      host: localhost
+      host: redis-db
       port: 6379
-  #      password:
-  #      database:
 
   jpa:
     hibernate:
