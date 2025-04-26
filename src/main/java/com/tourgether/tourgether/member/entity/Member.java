@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "social_members")
+//TODO (provider, providerId) Unique key
 public class Member {
 
   @Id
