@@ -62,4 +62,22 @@ public interface AttractionTranslationRepository extends
 
   Optional<AttractionTranslation> findByAttractionIdAndLanguageId(Long attractionId,
       Long languageId);
+
+  @Query("""
+          SELECT DISTINCT at
+          FROM AttractionTranslation at
+          JOIN at.attraction a
+          WHERE at.language.id = :languageId
+            AND within(
+              a.location,
+              ST_MakeEnvelope(:swLng, :swLat, :neLng, :neLat, 4326)
+            ) = true
+      """)
+  List<AttractionTranslation> findByTranslationIdMapBounds(
+      @Param("swLat") double swLat,
+      @Param("swLng") double swLng,
+      @Param("neLat") double neLat,
+      @Param("neLng") double neLng,
+      @Param("languageId") Long languageId
+  );
 }

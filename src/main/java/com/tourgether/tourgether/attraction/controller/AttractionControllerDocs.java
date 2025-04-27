@@ -1,6 +1,7 @@
 package com.tourgether.tourgether.attraction.controller;
 
 import com.tourgether.tourgether.attraction.dto.AttractionDetailResponse;
+import com.tourgether.tourgether.attraction.dto.AttractionMapSummaryResponse;
 import com.tourgether.tourgether.attraction.dto.AttractionSummaryResponse;
 import com.tourgether.tourgether.attraction.dto.LevelDescriptionResponse;
 import com.tourgether.tourgether.common.dto.ApiResult;
@@ -123,4 +124,28 @@ public interface AttractionControllerDocs {
       @Parameter(description = "최대 개수", example = "10") @Min(value = 1, message = "limit은 1 이상이어야 합니다.") int limit
   );
 
+  @Operation(summary = "지도 범위 내 여행지 조회", description = "지도 화면 내 (남서, 북동 좌표 범위)와 언어 ID를 기반으로 여행지를 조회합니다.")
+  @ApiResponse(responseCode = "200", description = "정상적으로 조회됨")
+  @ApiResponse(
+      responseCode = "400",
+      description = "잘못된 요청 파라미터",
+      content = @Content(schema = @Schema(implementation = ExceptionResponse.class))
+  )
+  @ApiResponse(
+      responseCode = "404",
+      description = "해당 언어 ID가 존재하지 않음",
+      content = @Content(schema = @Schema(implementation = ExceptionResponse.class))
+  )
+  @ApiResponse(
+      responseCode = "500",
+      description = "서버 내부 오류",
+      content = @Content(schema = @Schema(implementation = ExceptionResponse.class))
+  )
+  ResponseEntity<ApiResult<List<AttractionMapSummaryResponse>>> getAttractionsWithinBounds(
+      @Parameter(description = "남서쪽 위도", example = "37.5642") double swLat,
+      @Parameter(description = "남서쪽 경도", example = "126.9758") double swLng,
+      @Parameter(description = "북동쪽 위도", example = "37.5796") double neLat,
+      @Parameter(description = "북동쪽 경도", example = "126.9905") double neLng,
+      @Parameter(description = "언어 ID", example = "1") Long languageId
+  );
 }

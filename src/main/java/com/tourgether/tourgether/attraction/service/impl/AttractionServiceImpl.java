@@ -1,6 +1,7 @@
 package com.tourgether.tourgether.attraction.service.impl;
 
 import com.tourgether.tourgether.attraction.dto.AttractionDetailResponse;
+import com.tourgether.tourgether.attraction.dto.AttractionMapSummaryResponse;
 import com.tourgether.tourgether.attraction.dto.AttractionSummaryResponse;
 import com.tourgether.tourgether.attraction.dto.LevelDescriptionResponse;
 import com.tourgether.tourgether.attraction.entity.AttractionTranslation;
@@ -85,4 +86,19 @@ public class AttractionServiceImpl implements AttractionService {
         .toList();
   }
 
+  @Override
+  public List<AttractionMapSummaryResponse> getAttractionsWithinBounds(
+      Long languageId, double swLat, double swLng, double neLat, double neLng) {
+
+    boolean exists = languageRepository.existsById(languageId);
+    if (!exists) {
+      throw new AttractionTranslationNotFoundException("존재하지 않는 언어입니다.");
+    }
+
+    return translationRepository.findByTranslationIdMapBounds(
+            swLat, swLng, neLat, neLng, languageId)
+        .stream()
+        .map(AttractionMapSummaryResponse::from)
+        .toList();
+  }
 }

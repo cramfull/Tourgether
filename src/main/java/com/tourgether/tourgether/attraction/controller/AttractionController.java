@@ -1,6 +1,7 @@
 package com.tourgether.tourgether.attraction.controller;
 
 import com.tourgether.tourgether.attraction.dto.AttractionDetailResponse;
+import com.tourgether.tourgether.attraction.dto.AttractionMapSummaryResponse;
 import com.tourgether.tourgether.attraction.dto.AttractionSummaryResponse;
 import com.tourgether.tourgether.attraction.dto.LevelDescriptionResponse;
 import com.tourgether.tourgether.attraction.service.AttractionService;
@@ -72,6 +73,21 @@ public class AttractionController implements AttractionControllerDocs {
         attractionService.getPopularAttractions(languageId, limit);
 
     return ResponseEntity.ok(ApiResult.success(recommendations));
+  }
+
+  @GetMapping("/bounds")
+  public ResponseEntity<ApiResult<List<AttractionMapSummaryResponse>>> getAttractionsWithinBounds(
+      @RequestParam double swLat,
+      @RequestParam double swLng,
+      @RequestParam double neLat,
+      @RequestParam double neLng,
+      @RequestParam Long languageId
+  ) {
+    List<AttractionMapSummaryResponse> attractions = attractionService.getAttractionsWithinBounds(
+        languageId, swLat, swLng, neLat, neLng
+    );
+
+    return ResponseEntity.ok(ApiResult.success(attractions));
   }
 
 }
