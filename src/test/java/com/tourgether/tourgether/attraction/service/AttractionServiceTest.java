@@ -6,6 +6,7 @@ import com.tourgether.tourgether.attraction.dto.LevelDescriptionResponse;
 import com.tourgether.tourgether.attraction.entity.Attraction;
 import com.tourgether.tourgether.attraction.entity.AttractionTranslation;
 import com.tourgether.tourgether.attraction.entity.LevelDescription;
+import com.tourgether.tourgether.attraction.enums.Area;
 import com.tourgether.tourgether.attraction.exception.AttractionTranslationNotFoundException;
 import com.tourgether.tourgether.attraction.repository.AttractionTranslationRepository;
 import com.tourgether.tourgether.attraction.repository.LevelDescriptionRepository;
@@ -60,7 +61,7 @@ class AttractionServiceTest {
   void setUp() {
     language = new Language(1L, "ko");
     Point location = createPoint(37.0, 127.0);
-    attraction = new Attraction(1L, location, "url");
+    attraction = new Attraction(1L, location, "url", Area.NORTHEAST);
   }
 
   @Test
@@ -102,7 +103,7 @@ class AttractionServiceTest {
     // given
     Point location = createPoint(37.0, 127.0);
 
-    Attraction nearbyAttraction = new Attraction(1L, location, "url");
+    Attraction nearbyAttraction = new Attraction(1L, location, "url", Area.NORTHEAST);
 
     AttractionTranslation nearbyTranslation = new AttractionTranslation(
         1L,
@@ -250,11 +251,12 @@ class AttractionServiceTest {
     AttractionTranslation popular2 = new AttractionTranslation(
         2L, language, attraction, "창덕궁", "서울", "궁궐", null, "창덕궁 설명", null, null, null);
 
-    when(translationRepository.findTopVisitedAttractions(1L, limit))
+    when(translationRepository.findTopVisitedAttractions(1L, null, limit))
         .thenReturn(List.of(popular1, popular2));
 
     // when
-    List<AttractionSummaryResponse> results = attractionService.getPopularAttractions(1L, limit);
+    List<AttractionSummaryResponse> results = attractionService.getPopularAttractions(1L, null,
+        limit);
 
     // then
     assertThat(results).hasSize(2);
@@ -262,7 +264,7 @@ class AttractionServiceTest {
     assertThat(results.get(1).name()).isEqualTo("창덕궁");
 
     verify(languageRepository).existsById(1L);
-    verify(translationRepository).findTopVisitedAttractions(1L, limit);
+    verify(translationRepository).findTopVisitedAttractions(1L, null, limit);
   }
 
   @Test
@@ -272,7 +274,7 @@ class AttractionServiceTest {
     when(languageRepository.existsById(999L)).thenReturn(false);
 
     // when & then
-    assertThatThrownBy(() -> attractionService.getPopularAttractions(999L, 5))
+    assertThatThrownBy(() -> attractionService.getPopularAttractions(999L, null, 5))
         .isInstanceOf(AttractionTranslationNotFoundException.class)
         .hasMessage("존재하지 않는 언어입니다.");
 

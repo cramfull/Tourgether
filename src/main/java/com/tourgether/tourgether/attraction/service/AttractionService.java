@@ -5,6 +5,7 @@ import com.tourgether.tourgether.attraction.dto.AttractionMapSummaryResponse;
 import com.tourgether.tourgether.attraction.dto.AttractionSummaryResponse;
 
 import com.tourgether.tourgether.attraction.dto.LevelDescriptionResponse;
+import com.tourgether.tourgether.attraction.enums.Area;
 import java.util.List;
 
 public interface AttractionService {
@@ -22,7 +23,7 @@ public interface AttractionService {
 
   List<LevelDescriptionResponse> getAttractionLevelDescriptions(Long translationId);
 
-  List<AttractionSummaryResponse> getPopularAttractions(Long languageId, int limit);
+  List<AttractionSummaryResponse> getPopularAttractions(Long languageId, Area area, int limit);
 
   List<AttractionMapSummaryResponse> getAttractionsWithinBounds(
       Long languageId, double swLat, double swLng, double neLat, double neLng);

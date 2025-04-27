@@ -4,6 +4,7 @@ import com.tourgether.tourgether.attraction.dto.AttractionDetailResponse;
 import com.tourgether.tourgether.attraction.dto.AttractionMapSummaryResponse;
 import com.tourgether.tourgether.attraction.dto.AttractionSummaryResponse;
 import com.tourgether.tourgether.attraction.dto.LevelDescriptionResponse;
+import com.tourgether.tourgether.attraction.enums.Area;
 import com.tourgether.tourgether.attraction.service.AttractionService;
 import com.tourgether.tourgether.common.dto.ApiResult;
 import jakarta.validation.constraints.Min;
@@ -67,10 +68,11 @@ public class AttractionController implements AttractionControllerDocs {
   @GetMapping("/popular")
   public ResponseEntity<ApiResult<List<AttractionSummaryResponse>>> getPopularAttractions(
       @RequestParam("languageId") Long languageId,
+      @RequestParam(value = "area", required = false) Area area,
       @RequestParam(value = "limit", defaultValue = "10") @Min(value = 1, message = "limit은 1 이상이어야 합니다.") int limit
   ) {
     List<AttractionSummaryResponse> recommendations =
-        attractionService.getPopularAttractions(languageId, limit);
+        attractionService.getPopularAttractions(languageId, area, limit);
 
     return ResponseEntity.ok(ApiResult.success(recommendations));
   }

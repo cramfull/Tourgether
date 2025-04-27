@@ -53,10 +53,13 @@ public interface AttractionTranslationRepository extends
           ORDER BY COUNT(*) DESC
           LIMIT :limit
       ) popular ON at.attraction_id = popular.attraction_id
+      JOIN attractions a ON a.id = at.attraction_id
       WHERE at.language_id = :languageId
+      AND (:area IS NULL OR a.area = :area)
       """, nativeQuery = true)
   List<AttractionTranslation> findTopVisitedAttractions(
       @Param("languageId") Long languageId,
+      @Param("area") String area,
       @Param("limit") int limit
   );
 

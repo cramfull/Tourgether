@@ -191,7 +191,7 @@ class AttractionControllerTest {
         "url2"
     );
 
-    when(attractionService.getPopularAttractions(1L, 2))
+    when(attractionService.getPopularAttractions(1L, null, 2))
         .thenReturn(List.of(response1, response2));
 
     // when & then

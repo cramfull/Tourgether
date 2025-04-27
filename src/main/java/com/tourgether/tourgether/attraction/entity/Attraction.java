@@ -1,5 +1,6 @@
 package com.tourgether.tourgether.attraction.entity;
 
+import com.tourgether.tourgether.attraction.enums.Area;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -25,4 +26,8 @@ public class Attraction {
 
   @Column(name = "thumbnail_img_url", nullable = false, columnDefinition = "TEXT")
   private String thumbnailImgUrl;
+
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false, length = 20)
+  private Area area;
 }

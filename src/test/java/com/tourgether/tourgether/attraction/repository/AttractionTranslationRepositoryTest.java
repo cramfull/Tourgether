@@ -2,6 +2,7 @@ package com.tourgether.tourgether.attraction.repository;
 
 import com.tourgether.tourgether.attraction.entity.Attraction;
 import com.tourgether.tourgether.attraction.entity.AttractionTranslation;
+import com.tourgether.tourgether.attraction.enums.Area;
 import com.tourgether.tourgether.language.entity.Language;
 import com.tourgether.tourgether.language.repository.LanguageRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -49,8 +50,8 @@ class AttractionTranslationRepositoryTest {
     Point location1 = createPoint(37.0, 127.0);
     Point location2 = createPoint(37.0, 127.0);
 
-    Attraction attraction = new Attraction(null, location1, "url");
-    Attraction attraction2 = new Attraction(null, location2, "url");
+    Attraction attraction = new Attraction(null, location1, "url", Area.NORTHEAST);
+    Attraction attraction2 = new Attraction(null, location2, "url", Area.NORTHEAST);
     Attraction savedAttraction = attractionRepository.save(attraction);
     Attraction savedAttraction2 = attractionRepository.save(attraction2);
 
@@ -102,9 +103,12 @@ class AttractionTranslationRepositoryTest {
     Point location2 = createPoint(37.5700, 126.9830); // 창덕궁
     Point farLocation = createPoint(37.0, 127.0);     // 멀리 떨어진 곳
 
-    Attraction attraction1 = attractionRepository.save(new Attraction(null, location1, "url"));
-    Attraction attraction2 = attractionRepository.save(new Attraction(null, location2, "url"));
-    Attraction attractionFar = attractionRepository.save(new Attraction(null, farLocation, "url"));
+    Attraction attraction1 = attractionRepository.save(
+        new Attraction(null, location1, "url", Area.NORTHEAST));
+    Attraction attraction2 = attractionRepository.save(
+        new Attraction(null, location2, "url", Area.NORTHEAST));
+    Attraction attractionFar = attractionRepository.save(
+        new Attraction(null, farLocation, "url", Area.NORTHEAST));
 
     translationRepository.save(new AttractionTranslation(
         null, savedLanguage, attraction1, "경복궁", "서울 종로구 세종로", "조선 시대의 대표 궁궐",

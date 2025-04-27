@@ -4,6 +4,7 @@ import com.tourgether.tourgether.attraction.dto.AttractionDetailResponse;
 import com.tourgether.tourgether.attraction.dto.AttractionMapSummaryResponse;
 import com.tourgether.tourgether.attraction.dto.AttractionSummaryResponse;
 import com.tourgether.tourgether.attraction.dto.LevelDescriptionResponse;
+import com.tourgether.tourgether.attraction.enums.Area;
 import com.tourgether.tourgether.common.dto.ApiResult;
 import com.tourgether.tourgether.common.dto.ExceptionResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -121,6 +122,7 @@ public interface AttractionControllerDocs {
   )
   ResponseEntity<ApiResult<List<AttractionSummaryResponse>>> getPopularAttractions(
       @Parameter(description = "언어 ID", example = "1") Long languageId,
+      @Parameter(description = "권역 정보", example = "SOUTHWEST") Area area,
       @Parameter(description = "최대 개수", example = "10") @Min(value = 1, message = "limit은 1 이상이어야 합니다.") int limit
   );
 
