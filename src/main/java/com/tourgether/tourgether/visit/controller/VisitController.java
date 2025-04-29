@@ -42,7 +42,7 @@ public class VisitController {
       @AuthenticationPrincipal CustomUserDetails userDetails,
       @PageableDefault(sort = "visitedAt", direction = Sort.Direction.DESC) Pageable pageable
   ) {
-    Page<VisitResponse> response = visitService.getVisitHistory(userDetails.memberId(), pageable);
+    Page<VisitResponse> response = visitService.getVisitHistory(1L, pageable);
     return ResponseEntity.ok(ApiResult.success(response));
   }
 }

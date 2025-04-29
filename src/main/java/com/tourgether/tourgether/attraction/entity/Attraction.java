@@ -2,6 +2,8 @@ package com.tourgether.tourgether.attraction.entity;
 
 import com.tourgether.tourgether.attraction.enums.Area;
 import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,4 +32,7 @@ public class Attraction {
   @Enumerated(EnumType.STRING)
   @Column(nullable = false, length = 20)
   private Area area;
+
+  @OneToMany(mappedBy = "attraction", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<AttractionLike> attractionLikes = new ArrayList<>();
 }
