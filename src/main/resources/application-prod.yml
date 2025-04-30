@@ -1,0 +1,20 @@
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  datasource:
+    url: jdbc:postgresql://${DB_HOST}:5432/${PROD_DB_NAME}
+    username: ${POSTGRES_PROD_USER}
+    password: ${POSTGRES_PROD_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+  data:
+    redis:
+      host: redis-db
+      port: 6379
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false

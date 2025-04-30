@@ -260,7 +260,10 @@ gradle-app.setting
 
 # End of https://www.toptal.com/developers/gitignore/api/java,macos,windows,gradle,intellij,visualstudiocode,netbeans
 
-.env
+.env*
 
 # PostgreSql
 pgdata/
+
+# AWS credentials (just in case)
+.aws/

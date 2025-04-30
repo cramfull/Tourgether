@@ -1,0 +1,32 @@
+name: CI - Develop Build Only
+
+on:
+  pull_request:
+    branches: [ develop ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Build with Dev Profile
+        run: ./gradlew clean build -x test
+        env:
+          SPRING_PROFILES_ACTIVE: dev
+          JWT_ACCESS_SECRET_KEY: ${{ secrets.JWT_ACCESS_SECRET_KEY }}
+          JWT_REFRESH_SECRET_KEY: ${{ secrets.JWT_REFRESH_SECRET_KEY }}
+          NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}
+          NAVER_CLIENT_SECRET: ${{ secrets.NAVER_CLIENT_SECRET }}
+          ODSAY_API_KEY: ${{ secrets.ODSAY_API_KEY }}
+          POSTGRES_DB: ${{ secrets.DEV_DB_NAME }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_DEV_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_DEV_PASSWORD }}
