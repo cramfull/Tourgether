@@ -229,6 +229,8 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+.idea/
+
 ### Gradle ###
 .gradle
 **/build/
@@ -257,3 +259,11 @@ gradle-app.setting
 *.hprof
 
 # End of https://www.toptal.com/developers/gitignore/api/java,macos,windows,gradle,intellij,visualstudiocode,netbeans
+
+.env*
+
+# PostgreSql
+pgdata/
+
+# AWS credentials (just in case)
+.aws/
