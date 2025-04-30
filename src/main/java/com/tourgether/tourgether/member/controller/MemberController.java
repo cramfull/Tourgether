@@ -24,41 +24,41 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/members/me")
 public class MemberController {
 
-    private final MemberService memberService;
+  private final MemberService memberService;
 
-    @DeleteMapping
-    public ResponseEntity<ApiResult<Void>> withdraw(
-            @AuthenticationPrincipal CustomUserDetails userDetails,
-            @RequestBody @Valid WithdrawRequest withdrawRequest
-    ) {
-        memberService.withdraw(userDetails.memberId(), withdrawRequest.socialAccessToken());
-        return ResponseEntity.ok(ApiResult.success(null));
-    }
+  @DeleteMapping
+  public ResponseEntity<ApiResult<Void>> withdraw(
+      @AuthenticationPrincipal CustomUserDetails userDetails,
+      @RequestBody @Valid WithdrawRequest withdrawRequest
+  ) {
+    memberService.withdraw(userDetails.memberId(), withdrawRequest.socialAccessToken());
+    return ResponseEntity.ok(ApiResult.success(null));
+  }
 
-    @PatchMapping("/languages")
-    public ResponseEntity<ApiResult<Void>> updateLanguage(
-            @AuthenticationPrincipal CustomUserDetails userDetails,
-            @RequestBody @Valid LanguageUpdateRequest languageUpdateRequest) {
+  @PatchMapping("/languages")
+  public ResponseEntity<ApiResult<Void>> updateLanguage(
+      @AuthenticationPrincipal CustomUserDetails userDetails,
+      @RequestBody @Valid LanguageUpdateRequest languageUpdateRequest) {
 
-        memberService.updateLanguage(userDetails.memberId(), languageUpdateRequest.languageCode());
-        return ResponseEntity.ok(ApiResult.success(null));
-    }
+    memberService.updateLanguage(userDetails.memberId(), languageUpdateRequest);
+    return ResponseEntity.ok(ApiResult.success(null));
+  }
 
-    @PatchMapping("/nickname")
-    public ResponseEntity<ApiResult<NicknameUpdateResponse>> updateNickname(
-            @AuthenticationPrincipal CustomUserDetails userDetails,
-            @RequestBody @Valid NicknameUpdateRequest nicknameUpdateRequest) {
+  @PatchMapping("/nickname")
+  public ResponseEntity<ApiResult<NicknameUpdateResponse>> updateNickname(
+      @AuthenticationPrincipal CustomUserDetails userDetails,
+      @RequestBody @Valid NicknameUpdateRequest nicknameUpdateRequest) {
 
-        NicknameUpdateResponse response = memberService.updateNickname(userDetails.memberId(),
-                nicknameUpdateRequest.nickname());
+    NicknameUpdateResponse response = memberService.updateNickname(userDetails.memberId(),
+        nicknameUpdateRequest.nickname());
 
-        return ResponseEntity.ok(ApiResult.success(response));
-    }
+    return ResponseEntity.ok(ApiResult.success(response));
+  }
 
-    @GetMapping
-    public ResponseEntity<ApiResult<MemberInfoResponse>> getMemberInfo(
-            @AuthenticationPrincipal CustomUserDetails userDetails) {
-        MemberInfoResponse response = memberService.getMemberInfo(userDetails.memberId());
-        return ResponseEntity.ok(ApiResult.success(response));
-    }
+  @GetMapping
+  public ResponseEntity<ApiResult<MemberInfoResponse>> getMemberInfo(
+      @AuthenticationPrincipal CustomUserDetails userDetails) {
+    MemberInfoResponse response = memberService.getMemberInfo(userDetails.memberId());
+    return ResponseEntity.ok(ApiResult.success(response));
+  }
 }

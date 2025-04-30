@@ -6,6 +6,7 @@ public record MemberInfoResponse(
     String provider,
     String nickname,
     String profileImage,
+    Long languageId,
     String languageCode
 ) {
 
@@ -14,6 +15,7 @@ public record MemberInfoResponse(
         member.getProvider().name(),
         member.getNickname(),
         member.getProfileImage(),
+        member.getLanguageId().getId(),
         member.getLanguageId().getLanguageCode()
     );
   }

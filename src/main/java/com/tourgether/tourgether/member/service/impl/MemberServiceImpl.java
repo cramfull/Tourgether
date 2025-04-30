@@ -5,7 +5,9 @@ import com.tourgether.tourgether.auth.oauth.strategy.OAuth2StrategyContext;
 import com.tourgether.tourgether.auth.service.AuthService;
 import com.tourgether.tourgether.auth.unlink.service.OauthUnlinkService;
 import com.tourgether.tourgether.language.entity.Language;
+import com.tourgether.tourgether.language.exception.LanguageNotFoundException;
 import com.tourgether.tourgether.language.repository.LanguageRepository;
+import com.tourgether.tourgether.member.dto.request.LanguageUpdateRequest;
 import com.tourgether.tourgether.member.dto.response.MemberInfoResponse;
 import com.tourgether.tourgether.member.dto.response.NicknameUpdateResponse;
 import com.tourgether.tourgether.member.entity.Member;
@@ -38,11 +40,11 @@ public class MemberServiceImpl implements MemberService {
 
   @Transactional
   @Override
-  public void updateLanguage(Long memberId, String languageCode) {
+  public void updateLanguage(Long memberId, LanguageUpdateRequest request) {
     Member member = memberRepository.getMemberOrThrow(memberId);
 
-    Language language = languageRepository.findByLanguageCode(languageCode)
-        .orElseThrow(() -> new RuntimeException("지원하지 않는 언어입니다."));
+    Language language = languageRepository.findById(request.languageId())
+        .orElseThrow(() -> new LanguageNotFoundException("지원하지 않는 언어입니다."));
 
     member.updateLanguage(language);
   }
