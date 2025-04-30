@@ -7,7 +7,7 @@ public record GoogleUserResponse(
         @NotBlank
         String sub,
         @NotBlank
-        String nickname,
+        String name,
         @NotBlank
         String picture
 ) implements OAuth2UserResponse {
@@ -16,7 +16,7 @@ public record GoogleUserResponse(
         return new OAuth2UserInfo(
                 sub(),
                 Provider.GOOGLE,
-                nickname(),
+                name(),
                 picture);
     }
 }

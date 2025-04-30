@@ -20,8 +20,8 @@ spring:
           client-id: ${NAVER_CLIENT_ID}
           client_secret: ${NAVER_CLIENT_SECRET}
         google:
-          userinfo-uri: "https://oauth2.googleapis.com/tokeninfo?id_token="
-          unlink-uri:
+          userinfo-uri: "https://www.googleapis.com/oauth2/v3/userinfo"
+          unlink-uri: "https://accounts.google.com/o/oauth2/revoke"
 
   config:
     activate:
@@ -35,7 +35,7 @@ spring:
 
   data:
     redis:
-      host: redis-db
+      host: localhost
       port: 6379
 
   jpa:

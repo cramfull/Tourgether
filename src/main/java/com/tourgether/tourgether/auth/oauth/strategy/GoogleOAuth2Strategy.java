@@ -21,8 +21,8 @@ public class GoogleOAuth2Strategy implements OAuth2Strategy {
     private final Provider PROVIDER;
 
     public GoogleOAuth2Strategy(OAuth2ClientUtil oAuth2ClientUtil,
-                                @Value("${spring.oauth2.client.provider.kakao.userinfo-uri}") String userInfoUri,
-                                @Value("${spring.oauth2.client.provider.kakao.unlink-uri}") String unlinkUri
+                                @Value("${spring.oauth2.client.provider.google.userinfo-uri}") String userInfoUri,
+                                @Value("${spring.oauth2.client.provider.google.unlink-uri}") String unlinkUri
     ) {
         this.oAuth2ClientUtil = oAuth2ClientUtil;
         this.USERINFO_URI = userInfoUri;
@@ -36,8 +36,8 @@ public class GoogleOAuth2Strategy implements OAuth2Strategy {
         // 서비스시, https://www.googleapis.com/oauth2/v3/certs 로
         // 구글 공개키 캐싱하여 직접 디코딩 후 검증 필요.
         GoogleUserResponse googleUserResponse = oAuth2ClientUtil.getUserInfo(
-                USERINFO_URI + providerAccessToken,
-                null,
+                USERINFO_URI,
+                providerAccessToken,
                 GoogleUserResponse.class);
 
         return (googleUserResponse == null) ? null
