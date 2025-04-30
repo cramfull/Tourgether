@@ -8,6 +8,7 @@ import java.time.format.DateTimeFormatter;
 public record VisitResponse(
     Long visitId,
     Long attractionId,
+    Long translationId,
     String name,
     String address,
     String thumbnailImgUrl,
@@ -22,6 +23,7 @@ public record VisitResponse(
     return new VisitResponse(
         visit.getId(),
         visit.getAttraction().getId(),
+        translation.getTranslationId(),
         translation.getName(),
         translation.getAddress(),
         visit.getAttraction().getThumbnailImgUrl(),

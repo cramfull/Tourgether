@@ -5,6 +5,7 @@ import com.tourgether.tourgether.attraction.entity.AttractionTranslation;
 
 public record AttractionLikeResponse(
     Long attractionId,
+    Long translationId,
     String name,
     String address,
     String thumbnailImgUrl
@@ -14,6 +15,7 @@ public record AttractionLikeResponse(
       AttractionTranslation translation) {
     return new AttractionLikeResponse(
         attraction.getId(),
+        translation.getTranslationId(),
         translation.getName(),
         translation.getAddress(),
         attraction.getThumbnailImgUrl()

@@ -31,7 +31,7 @@ public class AttractionLikeServiceImpl implements AttractionLikeService {
   @Transactional
   @Override
   public boolean toggleLike(Long attractionId, Long memberId) {
-    AttractionLikeId attractionLikeId = new AttractionLikeId(attractionId, memberId);
+    AttractionLikeId attractionLikeId = new AttractionLikeId(memberId, attractionId);
 
     if (likeRepository.existsById(attractionLikeId)) {
       likeRepository.deleteById(attractionLikeId);
