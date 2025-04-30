@@ -86,8 +86,8 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             echo "DB_HOST=${{ secrets.DB_HOST }}"  > /home/ubuntu/tourgether-server/.env.prod
-            echo "POSTGRES_USER=${{ secrets.DB_PROD_USERNAME }}" >> /home/ubuntu/tourgether-server/.env.prod
-            echo "POSTGRES_PASSWORD=${{ secrets.DB_PROD_PASSWORD }}" >> /home/ubuntu/tourgether-server/.env.prod
+            echo "POSTGRES_USER=${{ secrets.POSTGRES_USER }}" >> /home/ubuntu/tourgether-server/.env.prod
+            echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PROD_PASSWORD }}" >> /home/ubuntu/tourgether-server/.env.prod
             echo "POSTGRES_DB=${{ secrets.PROD_DB_NAME }}" >> /home/ubuntu/tourgether-server/.env.prod
             echo "NAVER_CLIENT_ID=${{ secrets.NAVER_CLIENT_ID }}" >> /home/ubuntu/tourgether-server/.env.prod
             echo "NAVER_CLIENT_SECRET=${{ secrets.NAVER_CLIENT_SECRET }}" >> /home/ubuntu/tourgether-server/.env.prod
