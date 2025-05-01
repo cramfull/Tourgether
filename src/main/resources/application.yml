@@ -23,10 +23,6 @@ spring:
           userinfo-uri: "https://www.googleapis.com/oauth2/v3/userinfo"
           unlink-uri: "https://accounts.google.com/o/oauth2/revoke"
 
-  config:
-    activate:
-      on-profile: dev
-
 odsay:
   api:
     key: ${ODSAY_API_KEY}

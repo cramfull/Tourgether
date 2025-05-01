@@ -4,9 +4,9 @@ spring:
       on-profile: dev
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/${DEV_DB_NAME}
-    username: ${POSTGRES_DEV_USER}
-    password: ${POSTGRES_DEV_PASSWORD}
+    url: jdbc:postgresql://localhost:5432/devdb
+    username: devuser
+    password: devpass123
     driver-class-name: org.postgresql.Driver
 
   data:
