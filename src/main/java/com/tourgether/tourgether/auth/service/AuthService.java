@@ -31,7 +31,8 @@ public class AuthService {
     private final OAuth2StrategyContext oAuth2StrategyContext;
     private final EntityManager entityManager;
 
-    private final long ACCESS_TOKEN_VALIDITY_TIME = 60 * 60 * 1000L; // 1시간
+//    private final long ACCESS_TOKEN_VALIDITY_TIME = 30 * 1000L; // 30초, TEST용
+    private final long ACCESS_TOKEN_VALIDITY_TIME = 2 * 60 * 60 * 1000L; // 1시간
     private final long REFRESH_TOKEN_VALIDITY_TIME = 14 * 24 * 60 * 60 * 1000L; // 2주
 
     @Transactional
@@ -95,7 +96,7 @@ public class AuthService {
 
     public TokenResponse issueToken(Long memberId) {
         String tokenCode = jwtUtil.getRandomKey();
-        tokenMappingService.saveTokenCodeMapping(memberId, tokenCode, ACCESS_TOKEN_VALIDITY_TIME);
+        tokenMappingService.saveTokenCodeMapping(memberId, tokenCode, REFRESH_TOKEN_VALIDITY_TIME);
 
         String accessToken = jwtUtil.generateAccessToken(tokenCode, ACCESS_TOKEN_VALIDITY_TIME);
         String refreshToken = jwtUtil.generateRefreshToken(tokenCode, REFRESH_TOKEN_VALIDITY_TIME);
