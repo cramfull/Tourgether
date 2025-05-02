@@ -18,7 +18,11 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "social_members")
+@Table(name = "social_members", uniqueConstraints = {
+        @UniqueConstraint(
+                columnNames = {"provider", "provider_id"}
+        )
+})
 //TODO (provider, providerId) Unique key
 public class Member {
 
@@ -34,7 +38,7 @@ public class Member {
   @Column(name = "provider_id", nullable = false)
   private String providerId;
 
-  @Column(name = "nickname", nullable = false, unique = true)
+  @Column(name = "nickname", nullable = false)
   private String nickname;
 
   @Column(name = "profile_image", nullable = false)
@@ -77,7 +81,7 @@ public class Member {
 
   @Builder
   private Member(Provider provider, String providerId, String nickname, String profileImage,
-      Language languageId) {
+                 Language languageId) {
     this.provider = provider;
     this.providerId = providerId;
     this.nickname = nickname;

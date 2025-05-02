@@ -46,4 +46,10 @@ public class AuthController {
     authService.logout(accessToken, userDetails.memberId());
     return ResponseEntity.ok(ApiResult.success(null, HttpStatus.NO_CONTENT.value(), "정상 로그아웃"));
   }
+
+  @GetMapping("/auth/me")
+  public ResponseEntity<ApiResult<Void>> validateToken(
+          @AuthenticationPrincipal CustomUserDetails userDetails){
+    return ResponseEntity.ok(ApiResult.success(null));
+  }
 }
