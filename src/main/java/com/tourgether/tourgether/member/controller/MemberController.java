@@ -40,7 +40,7 @@ public class MemberController {
       @AuthenticationPrincipal CustomUserDetails userDetails,
       @RequestBody @Valid LanguageUpdateRequest languageUpdateRequest) {
 
-    memberService.updateLanguage(1L, languageUpdateRequest);
+    memberService.updateLanguage(userDetails.memberId(), languageUpdateRequest);
     return ResponseEntity.ok(ApiResult.success(null));
   }
 
@@ -58,7 +58,7 @@ public class MemberController {
   @GetMapping
   public ResponseEntity<ApiResult<MemberInfoResponse>> getMemberInfo(
       @AuthenticationPrincipal CustomUserDetails userDetails) {
-    MemberInfoResponse response = memberService.getMemberInfo(1L);
+    MemberInfoResponse response = memberService.getMemberInfo(userDetails.memberId());
     return ResponseEntity.ok(ApiResult.success(response));
   }
 }
