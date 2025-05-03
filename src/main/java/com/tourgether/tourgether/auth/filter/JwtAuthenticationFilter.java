@@ -39,6 +39,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
       FilterChain filterChain) throws ServletException, IOException {
+    
     // CORS 설정 헤더 인증 로직 없이 통과
     if (HttpMethod.OPTIONS.name().equalsIgnoreCase(request.getMethod())) {
       filterChain.doFilter(request, response);
