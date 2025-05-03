@@ -65,11 +65,13 @@ public class SecurityConfig {
         //허용할 url 설정
         configuration.addAllowedOrigin("http://localhost:5173");
         configuration.addAllowedOrigin("https://www.tourgether.site");
+        configuration.addAllowedOrigin("https://www.tourgether.shop");
 
         //허용할 헤더 설정
-        configuration.addAllowedHeader("*");
         //허용할 http method
-        configuration.addAllowedMethod("*");
+        configuration.addAllowedMethod(CorsConfiguration.ALL);
+        configuration.addAllowedHeader(CorsConfiguration.ALL);
+
         //사용자 자격 증명이 지원되는지 여부
         configuration.setAllowCredentials(true);
 
