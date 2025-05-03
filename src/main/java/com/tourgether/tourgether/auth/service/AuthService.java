@@ -138,6 +138,6 @@ public class AuthService {
                                 .providerId(oAuth2UserInfo.providerId())
                                 .nickname(oAuth2UserInfo.nickname())
                                 .profileImage(oAuth2UserInfo.profileImage())
-                                .languageId(entityManager.getReference(Language.class, 2)).build()));
+                                .languageId(entityManager.getReference(Language.class, 0)).build()));
     }
 }

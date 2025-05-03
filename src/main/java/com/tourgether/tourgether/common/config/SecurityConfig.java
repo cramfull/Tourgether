@@ -64,6 +64,8 @@ public class SecurityConfig {
 
         //허용할 url 설정
         configuration.addAllowedOrigin("http://localhost:5173");
+        configuration.addAllowedOrigin("https://www.tourgether.site");
+
         //허용할 헤더 설정
         configuration.addAllowedHeader("*");
         //허용할 http method
