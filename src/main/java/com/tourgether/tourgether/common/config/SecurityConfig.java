@@ -39,21 +39,20 @@ public class SecurityConfig {
             sessionManagement
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         )
-
-        .authorizeHttpRequests(
-            (auth) ->
-                auth
-                    .requestMatchers(
-                        "/h2-console/**",
-                        "/swagger-ui/**",
-                        "/v3/api-docs/**",
-                        "/swagger-ui.html",
-                        "/api/v1/oauth2/**",
-                        "/api/v1/auth/reissue")
-                    .permitAll()
-                    .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                    .anyRequest().authenticated()
-        )
+                .authorizeHttpRequests(
+                        (auth) ->
+                                auth
+                                        .requestMatchers(
+                                                "/h2-console/**",
+                                                "/swagger-ui/**",
+                                                "/v3/api-docs/**",
+                                                "/swagger-ui.html",
+                                                "/api/v1/oauth2/**",
+                                                "/api/v1/auth/reissue")
+                                        .permitAll()
+                                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                                        .anyRequest().authenticated()
+                )
 
         .headers((headers) ->
             headers
@@ -66,27 +65,27 @@ public class SecurityConfig {
 
   @Bean
   CorsConfigurationSource corsConfigurationSource() {
-    CorsConfiguration config = new CorsConfiguration();
+    CorsConfiguration configuration = new CorsConfiguration();
 
-    // Origin
-    config.addAllowedOriginPattern("http://localhost:*");
-    config.addAllowedOriginPattern("https://*.tourgether.site");
-    config.addAllowedOriginPattern("https://*.tourgether.shop");
+      configuration.setAllowedOrigins(List.of(
+                "http://localhost:5173",
+                "https://www.tourgether.site",
+                "https://tourgether.site",
+                "https://www.tourgether.shop",
+                "https://tourgether.shop"
+        ));
 
-    // Method
-    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedMethods(        List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of(
+                "Origin", "Content-Type", "Accept", "Authorization", "X-Requested-With"
+        ));
 
-    // Header (★ 반드시 명시)
-    config.setAllowedHeaders(List.of(
-        "Origin", "Content-Type", "Accept", "Authorization", "X-Requested-With"
-    ));
+        configuration.setAllowCredentials(true);
+        configuration.setMaxAge(3600L);
 
-    // Credential
-    config.setAllowCredentials(true);
-    config.setMaxAge(3600L);
 
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    source.registerCorsConfiguration("/**", config);
+    source.registerCorsConfiguration("/**", configuration);
     return source;
   }
 }
