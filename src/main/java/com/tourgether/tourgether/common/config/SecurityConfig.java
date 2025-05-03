@@ -4,6 +4,7 @@ import com.tourgether.tourgether.auth.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -49,7 +50,9 @@ public class SecurityConfig {
                                                 "/swagger-ui.html",
                                                 "/api/v1/oauth2/**",
                                                 "/api/v1/auth/reissue")
-                                        .permitAll().anyRequest().authenticated()
+                                        .permitAll()
+                                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                                        .anyRequest().authenticated()
                 )
 
                 .headers((headers) ->
@@ -65,13 +68,13 @@ public class SecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
+
         configuration.setAllowedOrigins(List.of(
                 "http://localhost:5173",
                 "https://www.tourgether.site",
                 "https://tourgether.site",
                 "https://www.tourgether.shop",
-                "https://tourgether.shop",
-                "http://localhost:5173"
+                "https://tourgether.shop"
         ));
 
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));

@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -39,7 +40,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
       FilterChain filterChain) throws ServletException, IOException {
     // CORS 설정 헤더 인증 로직 없이 통과
-    if (headerUtil.getPREFIX_OPTION().equalsIgnoreCase(request.getMethod())) {
+    if (HttpMethod.OPTIONS.name().equalsIgnoreCase(request.getMethod())) {
       filterChain.doFilter(request, response);
       return;
     }
