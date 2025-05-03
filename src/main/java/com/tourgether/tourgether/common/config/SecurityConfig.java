@@ -1,5 +1,7 @@
 package com.tourgether.tourgether.common.config;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 import com.tourgether.tourgether.auth.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -28,10 +30,11 @@ public class SecurityConfig {
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http
-        .cors(
+        /*.cors(
             (cors) ->
                 cors
-                    .configurationSource(corsConfigurationSource()))
+                    .configurationSource(corsConfigurationSource()))*/
+        .cors(withDefaults())
         .csrf(
             AbstractHttpConfigurer::disable
         )
@@ -39,20 +42,20 @@ public class SecurityConfig {
             sessionManagement
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         )
-                .authorizeHttpRequests(
-                        (auth) ->
-                                auth
-                                        .requestMatchers(
-                                                "/h2-console/**",
-                                                "/swagger-ui/**",
-                                                "/v3/api-docs/**",
-                                                "/swagger-ui.html",
-                                                "/api/v1/oauth2/**",
-                                                "/api/v1/auth/reissue")
-                                        .permitAll()
-                                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                                        .anyRequest().authenticated()
-                )
+        .authorizeHttpRequests(
+            (auth) ->
+                auth
+                    .requestMatchers(
+                        "/h2-console/**",
+                        "/swagger-ui/**",
+                        "/v3/api-docs/**",
+                        "/swagger-ui.html",
+                        "/api/v1/oauth2/**",
+                        "/api/v1/auth/reissue")
+                    .permitAll()
+                    .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                    .anyRequest().authenticated()
+        )
 
         .headers((headers) ->
             headers
@@ -63,29 +66,28 @@ public class SecurityConfig {
   }
 
 
-  @Bean
+  /*@Bean
   CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
 
-      configuration.setAllowedOrigins(List.of(
-                "http://localhost:5173",
-                "https://www.tourgether.site",
-                "https://tourgether.site",
-                "https://www.tourgether.shop",
-                "https://tourgether.shop"
-        ));
+    configuration.setAllowedOrigins(List.of(
+        "http://localhost:5173",
+        "https://www.tourgether.site",
+        "https://tourgether.site",
+        "https://www.tourgether.shop",
+        "https://tourgether.shop"
+    ));
 
-        configuration.setAllowedMethods(        List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
-        configuration.setAllowedHeaders(List.of(
-                "Origin", "Content-Type", "Accept", "Authorization", "X-Requested-With"
-        ));
+    configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+    configuration.setAllowedHeaders(List.of(
+        "Origin", "Content-Type", "Accept", "Authorization", "X-Requested-With"
+    ));
 
-        configuration.setAllowCredentials(true);
-        configuration.setMaxAge(3600L);
-
+    configuration.setAllowCredentials(true);
+    configuration.setMaxAge(3600L);
 
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
     source.registerCorsConfiguration("/**", configuration);
     return source;
-  }
+  }*/
 }
