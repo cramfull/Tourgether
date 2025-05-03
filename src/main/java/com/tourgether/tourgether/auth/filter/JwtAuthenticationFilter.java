@@ -35,16 +35,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   private final HeaderUtil headerUtil;
   private final AuthService authService;
 
+  @Override
+  protected boolean shouldNotFilter(HttpServletRequest request) {
+    return HttpMethod.OPTIONS.matches(request.getMethod());
+  }
 
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
       FilterChain filterChain) throws ServletException, IOException {
-    
-    // CORS 설정 헤더 인증 로직 없이 통과
-    if (HttpMethod.OPTIONS.name().equalsIgnoreCase(request.getMethod())) {
-      filterChain.doFilter(request, response);
-      return;
-    }
 
     // request에서 token 추출
     String token = headerUtil.resolveToken(request);
@@ -89,10 +87,5 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       response.setStatus(HttpServletResponse.SC_FORBIDDEN);
       return;
     }
-  }
-
-  @Override
-  protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-    return false;
   }
 }
