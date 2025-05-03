@@ -65,7 +65,6 @@ public class SecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-
         configuration.setAllowedOrigins(List.of(
                 "http://localhost:5173",
                 "https://www.tourgether.site",
