@@ -5,11 +5,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer.FrameOptionsConfig;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -29,15 +27,21 @@ public class SecurityConfig {
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http
-        // Spring Security 내장 CorsFilter 활성화
-        .cors(Customizer.withDefaults())
+        // ① Security 내장 CorsFilter 활성화, 아래 corsConfigurationSource() 를 읽어갑니다
+        .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+
+        // ② CSRF 끄기
         .csrf(AbstractHttpConfigurer::disable)
+
+        // ③ 세션 없이 JWT로 stateless 인증
         .sessionManagement(sm ->
             sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         )
+
+        // ④ 경로별 인가 설정
         .authorizeHttpRequests(auth ->
             auth
-                // 여기는 인증 없이 풀고 싶은 경로들
+                // 인증 없이 풀 URL
                 .requestMatchers(
                     "/h2-console/**",
                     "/swagger-ui/**",
@@ -46,27 +50,25 @@ public class SecurityConfig {
                     "/api/v1/oauth2/**",
                     "/api/v1/auth/reissue"
                 ).permitAll()
-                // OPTIONS 프리플라이트도 인증 없이 통과
+                // Preflight(OPTIONS) 도 풀어주기
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                // 나머지 요청은 인증 필수
                 .anyRequest().authenticated()
         )
-        .headers(headers ->
-            headers.frameOptions(FrameOptionsConfig::disable)
-        )
-        // JWT 필터는 시큐리티 체인 앞쪽에
+
+        // ⑤ JWT 필터 등록
         .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
     return http.build();
   }
 
   /**
-   * Spring Security 가 사용할 CORS 정책 정의 이 빈을 두면 .cors(withDefaults()) 가 이 설정을 읽어 듭니다.
+   * Spring Security CORS 처리를 위한 정책 정의
    */
   @Bean
   public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration config = new CorsConfiguration();
-
-    // 크리덴셜(true)이므로 와일드카드 대신 패턴 사용
+    // 크리덴셜(true)이므로 와일드카드 대신 패턴을 써야 합니다
     config.setAllowedOriginPatterns(List.of(
         "https://tourgether.shop",
         "https://www.tourgether.shop",
