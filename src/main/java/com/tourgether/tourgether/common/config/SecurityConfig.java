@@ -15,6 +15,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.List;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -58,25 +60,28 @@ public class SecurityConfig {
         return http.build();
     }
 
+
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        //허용할 url 설정
-        configuration.addAllowedOrigin("http://localhost:5173");
-        configuration.addAllowedOrigin("https://www.tourgether.site");
-        configuration.addAllowedOrigin("https://www.tourgether.shop");
 
-        //허용할 헤더 설정
-        //허용할 http method
-        configuration.addAllowedMethod(CorsConfiguration.ALL);
-        configuration.addAllowedHeader(CorsConfiguration.ALL);
+        configuration.setAllowedOrigins(List.of(
+                "http://localhost:5173",
+                "https://www.tourgether.site",
+                "https://tourgether.site",
+                "https://www.tourgether.shop",
+                "https://tourgether.shop",
+                "http://localhost:5173"
+        ));
 
-        //사용자 자격 증명이 지원되는지 여부
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
 }
