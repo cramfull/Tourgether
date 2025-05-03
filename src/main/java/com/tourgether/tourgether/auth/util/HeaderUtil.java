@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class HeaderUtil {
 
+  private final String PREFIX_OPTION = "OPTIONS";
   private final String PREFIX_TOKEN_BEARER = "Bearer ";
 
   public String resolveToken(HttpServletRequest request){
