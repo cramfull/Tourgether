@@ -35,7 +35,7 @@ public class AttractionTranslation {
   @Column(nullable = false)
   private String address;
 
-  @Column(name = "summary", nullable = false)
+  @Column(name = "summary", nullable = false, columnDefinition = "TEXT")
   private String summary;
 
   @Column(name = "audio_url")
