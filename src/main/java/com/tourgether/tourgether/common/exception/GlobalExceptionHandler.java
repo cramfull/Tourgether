@@ -1,5 +1,6 @@
 package com.tourgether.tourgether.common.exception;
 
+import com.tourgether.tourgether.auth.exception.UserNotFoundException;
 import com.tourgether.tourgether.common.dto.ApiResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -37,6 +38,14 @@ public class GlobalExceptionHandler {
 
     return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
         .body(ApiResult.fail(HttpStatus.UNAUTHORIZED.value(), ex.getMessage()));
+  }
+
+  @ExceptionHandler(UserNotFoundException.class)
+  public ResponseEntity<ApiResult<?>> handleUnauthorized(UserNotFoundException ex) {
+    log.warn("[UserNotFoundException] {}", ex.getMessage());
+
+    return ResponseEntity.status(HttpStatus.GONE)
+            .body(ApiResult.fail(HttpStatus.GONE.value(), ex.getMessage()));
   }
 
   @ExceptionHandler(BadGatewayException.class)
